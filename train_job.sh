@@ -15,13 +15,13 @@ module load cuda/12.6  # Explicit is better than implicit
 # Activate your venv
 source ~/envs/stack_t/bin/activate
 
-# Uninstall conflicting packages
-pip uninstall -y jax jaxlib orbax-checkpoint
-
-# Install the CUDA‑enabled JAX 0.4.28 wheels
-pip install --no-index \
-    jax==0.4.28 \
-    jaxlib==0.4.28+cuda12.cudnn89.computecanada
+## Uninstall conflicting packages
+#pip uninstall -y jax jaxlib orbax-checkpoint
+#
+## Install the CUDA‑enabled JAX 0.4.28 wheels
+#pip install --no-index \
+#    jax==0.4.28 \
+#    jaxlib==0.4.28+cuda12.cudnn89.computecanada
 
 # ✅ Optional: verify GPU is visible
 python - <<EOF
@@ -33,9 +33,10 @@ EOF
 # ✅ Run your training
 python ~/scratch/stack_Transformer/example_stack_t.py \
     --batch_size 32 \
-    --training_steps 100000 \
+    --training_steps 10000 \
     --task reverse_string \
-    --architecture rnn \
+    --architecture transformer_encoder \
     --stack=FALSE \
     --pos=NONE \
     --seed=0
+
