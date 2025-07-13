@@ -36,7 +36,7 @@ python ~/scratch/stack_Transformer/example_stack_t.py \
     --training_steps 10000 \
     --task reverse_string \
     --architecture transformer_encoder \
-    --stack=FALSE \
+    --stack=True \
     --pos=NONE \
     --seed=0
 
