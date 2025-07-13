@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --time=0-00:30:00
+#SBATCH --time=0-01:20:00
 #SBATCH --account=def-vumaiha               # <== use your actual account
 #SBATCH --mem=32000M
 #SBATCH --gpus-per-node=1
@@ -33,7 +33,7 @@ EOF
 # ✅ Run your training
 python ~/scratch/stack_Transformer/example_stack_t.py \
     --batch_size 32 \
-    --training_steps 10000 \
+    --training_steps 100000 \
     --task reverse_string \
     --architecture transformer_encoder \
     --stack=True \
