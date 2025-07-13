@@ -11,5 +11,4 @@ nvidia-smi
 
 # Activate your enviroment
 source ~/envs/stack_t/bin/activate
-
-python example_stack_t.py --batch_size 32 --training_steps 100000 --task reverse_string --architecture rnn --stack=FALSE --pos=NONE --seed=0
+python ~/scratch/stack_Tranformer/example_stack_t.py --batch_size 32 --training_steps 100000 --task reverse_string --architecture rnn --stack=FALSE --pos=NONE --seed=0
