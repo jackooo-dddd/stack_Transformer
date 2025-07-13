@@ -13,16 +13,16 @@ echo "Hello World"
 nvidia-smi
 
 module load python/3.12
-module load cuda/12.4  # Explicit is better than implicit
+module load cuda/12.6  # Explicit is better than implicit
 
 # ✅ Activate your environment FIRST
 source ~/envs/stack_t/bin/activate
 
-# ✅ Install JAX + CUDA-enabled jaxlib into your venv
-pip uninstall -y jax jaxlib
-pip install --no-index \
-    jax==0.6.0 \
-    jaxlib==0.6.0+computecanada
+# Force reinstall JAX + CUDA-enabled jaxlib
+pip install --no-index --upgrade --force-reinstall \
+  --find-links /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic \
+  jax==0.6.0+computecanada \
+  jaxlib==0.6.0+computecanada
 
 # ✅ Optional: verify GPU is visible
 python - <<EOF
