@@ -8,7 +8,8 @@ export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
 echo "Hello World"
 nvidia-smi
-
+module load python/3.12
+module load cuda
 # Activate your enviroment
 source ~/envs/stack_t/bin/activate
 python ~/scratch/stack_Transformer/example_stack_t.py --batch_size 32 --training_steps 100000 --task reverse_string --architecture rnn --stack=FALSE --pos=NONE --seed=0
