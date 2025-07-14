@@ -1,41 +1,39 @@
 #!/bin/bash
-#SBATCH --time=0-03:00:00
-#SBATCH --account=def-vumaiha               # <== use your actual account
+#SBATCH --time=0-00:30:00
+#SBATCH --account=def-vumaiha
 #SBATCH --mem=32000M
 #SBATCH --gpus-per-node=1
 #SBATCH --cpus-per-task=10
+#SBATCH --output=result/even_pairs.%j.out
+#SBATCH --error=result/even_pairs.%j.err
+#SBATCH --job-name=even_pairs
+
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
-echo "Hello World"
-nvidia-smi
-
+# load modules & env
 module load python/3.12
-module load cuda/12.6  # Explicit is better than implicit
-
-# Activate your venv
+module load cuda/12.6
 source ~/envs/stack_t/bin/activate
 
-## Uninstall conflicting packages
-#pip uninstall -y jax jaxlib orbax-checkpoint
-#
-## Install the CUDA‑enabled JAX 0.4.28 wheels
-#pip install --no-index \
-#    jax==0.4.28 \
-#    jaxlib==0.4.28+cuda12.cudnn89.computecanada
-
-#  verify GPU is visible
+nvidia-smi
 python - <<EOF
 import jax
 print("JAX version:", jax.__version__)
 print("Devices:", jax.devices())
 EOF
 
+# make sure output directory exists
+mkdir -p result
+
+# run your code
+JOB_NAME="even_pairs"   # just for your own scripts/flags
+echo "Running transformer_encoder with JOB_NAME=$JOB_NAME"
+
 python ~/scratch/stack_Transformer/example_stack_t.py \
     --batch_size 32 \
-    --training_steps 100000 \
-    --task reverse_string \
+    --training_steps 1000 \
+    --task "$JOB_NAME" \
     --architecture transformer_encoder \
     --stack=True \
     --pos=NONE \
     --seed=0
-
