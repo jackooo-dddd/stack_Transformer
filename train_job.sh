@@ -5,8 +5,7 @@
 #SBATCH --gpus-per-node=1
 #SBATCH --cpus-per-task=10
 #SBATCH --output=result/even_pairs.%j.out
-#SBATCH --error=result/even_pairs.%j.err
-#SBATCH --job-name=even_pairs
+#SBATCH --error=result/even_pairs.%j.out
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
@@ -24,11 +23,8 @@ EOF
 
 # make sure output directory exists
 mkdir -p result
-
-# run your code
-JOB_NAME="even_pairs"   # just for your own scripts/flags
+JOB_NAME="even_pairs"
 echo "Running transformer_encoder with JOB_NAME=$JOB_NAME"
-
 python ~/scratch/stack_Transformer/example_stack_t.py \
     --batch_size 32 \
     --training_steps 1000 \
