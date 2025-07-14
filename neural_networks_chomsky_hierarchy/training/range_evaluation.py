@@ -76,6 +76,12 @@ def range_evaluation(
   if use_tqdm:
     lengths = tqdm.tqdm(lengths)
   for length in lengths:
+    """
+    Edited by shunqi: Remove some unecessary evaluations to save time
+    """
+    # print(length)
+    if length < 20 or length % 2 == 1:
+      continue
     # We need to clear the cache of jitted functions, to avoid overflow as we
     # are jitting len(lengths) ones, which can be a lot.
     apply_fn.clear_cache()

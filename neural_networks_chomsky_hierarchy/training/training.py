@@ -264,7 +264,6 @@ class TrainingWorker:
       if not rng_seq._subkeys:  # pylint: disable=protected-access
         rng_seq.reserve(rngs_reserve)
     jax.clear_caches()
-    # jax.clear_backends()
     ## Test the model on a validation set with length up to 100.
     eval_results = None
     if training_params.compute_full_range_test:
