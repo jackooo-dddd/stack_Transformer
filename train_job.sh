@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --time=0-00:30:00
+#SBATCH --time=0-00:50:00
 #SBATCH --account=def-vumaiha
 #SBATCH --mem=32000M
 #SBATCH --gpus-per-node=1
@@ -21,15 +21,29 @@ print("JAX version:", jax.__version__)
 print("Devices:", jax.devices())
 EOF
 
-# make sure output directory exists
 mkdir -p result
 JOB_NAME="even_pairs"
-echo "Running transformer_encoder with JOB_NAME=$JOB_NAME"
+echo "---------------------------------------------------"
+echo "Start running Stack RNN with JOB_NAME=$JOB_NAME"
+python ~/scratch/stack_Transformer/example_stack_t.py \
+    --batch_size 32 \
+    --training_steps 1000 \
+    --task "$JOB_NAME" \
+    --architecture stack_rnn \
+    --stack=False \
+    --pos=NONE \
+    --seed=0
+echo "Finish running Stack RNN with JOB_NAME=$JOB_NAME"
+echo "---------------------------------------------------"
+echo "---------------------------------------------------"
+echo "Start running STANDARD transformer_encoder with JOB_NAME=$JOB_NAME"
 python ~/scratch/stack_Transformer/example_stack_t.py \
     --batch_size 32 \
     --training_steps 1000 \
     --task "$JOB_NAME" \
     --architecture transformer_encoder \
-    --stack=True \
+    --stack=False \
     --pos=NONE \
     --seed=0
+echo "Finish running STANDARD transformer_encoder with JOB_NAME=$JOB_NAME"
+echo "---------------------------------------------------"

@@ -88,7 +88,7 @@ def main(unused_argv) -> None:
     max_range_test_length = 100
 
     is_autoregressive = False
-
+    print("------------Current Architecture---------------:", _ARCHITECTURE.value)
     if 'transformer' in _ARCHITECTURE.value:
       causal_masking = False
       if _ARCHITECTURE.value == 'transformer_decoder':
@@ -179,14 +179,18 @@ def main(unused_argv) -> None:
     _, eval_results, _ = training_worker.run()
 
     # Gather results and print final score.
-    accuracies = [r['accuracy'] for r in eval_results]
-    score = np.mean(accuracies[sequence_length + 1:])
-    print(f'seed: {seed}')
-    print(f'Network score: {score}')
-    scores.append(score)
-  print(f'Maximum score: {max(scores)}')
-  print(f'Mean score: {np.mean(scores)}')
-  print(f'Std score: {np.std(scores)}')
+    """
+    Shunqi: We do not consider the final score as we have skipped some evaluations so the sequence length is not our
+    number of test cases we used.
+    """
+    # accuracies = [r['accuracy'] for r in eval_results]
+    # score = np.mean(accuracies[sequence_length + 1:])
+  #   print(f'seed: {seed}')
+  #   print(f'Network score: {score}')
+  #   scores.append(score)
+  # print(f'Maximum score: {max(scores)}')
+  # print(f'Mean score: {np.mean(scores)}')
+  # print(f'Std score: {np.std(scores)}')
 
 if __name__ == '__main__':
   app.run(main)
