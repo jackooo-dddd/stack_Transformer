@@ -1,11 +1,11 @@
 #!/bin/bash
-#SBATCH --time=1-12:22:00
+#SBATCH --time=0-14:22:00
 #SBATCH --account=def-vumaiha
 #SBATCH --mem=32000M
 #SBATCH --gpus-per-node=1
 #SBATCH --cpus-per-task=10
-#SBATCH --output=result/all_cs_tasks.%j.out
-#SBATCH --error=result/all_cs_tasks.%j.err
+#SBATCH --output=result/all_dcf_tasks.%j.out
+#SBATCH --error=result/all_dcf_tasks.%j.err
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
