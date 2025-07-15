@@ -1,11 +1,11 @@
 #!/bin/bash
-#SBATCH --time=0-12:20:00
+#SBATCH --time=0-22:22:00
 #SBATCH --account=def-vumaiha
 #SBATCH --mem=32000M
 #SBATCH --gpus-per-node=1
 #SBATCH --cpus-per-task=10
-#SBATCH --output=result/all_tasks.%j.out
-#SBATCH --error=result/all_tasks.%j.err
+#SBATCH --output=result/all_regular_tasks.%j.out
+#SBATCH --error=result/all_regular_tasks.%j.err
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
@@ -46,8 +46,7 @@ for JOB_NAME in $TASKS; do
   echo "================================================================="
   echo "===========ITERATION FOR JOB: $JOB_NAME=========================="
   echo "================================================================="
-  echo "---------------------------------------------------"
-  echo "Start running STACK RNN for task=$JOB_NAME"
+  echo " 1) Start running STACK RNN for task=$JOB_NAME"
   python ~/scratch/stack_Transformer/example_stack_t.py \
       --batch_size 32 \
       --training_steps 100000 \
@@ -59,7 +58,7 @@ for JOB_NAME in $TASKS; do
   echo "Finish running STACK RNN for task=$JOB_NAME"
 
   echo "---------------------------------------------------"
-  echo "Start running STANDARD transformer_encoder for task=$JOB_NAME"
+  echo " 2) Start running *STANDARD* transformer_encoder for task=$JOB_NAME *WITHOUT* POSITIONAL ENCODING"
   python ~/scratch/stack_Transformer/example_stack_t.py \
       --batch_size 32 \
       --training_steps 100000 \
@@ -68,10 +67,22 @@ for JOB_NAME in $TASKS; do
       --stack=False \
       --pos=NONE \
       --seed=0
-  echo "Finish running STANDARD transformer_encoder for task=$JOB_NAME"
+  echo "Finish running *STANDARD* transformer_encoder for task=$JOB_NAME *WITHOUT* POSITIONAL ENCODING"
 
   echo "---------------------------------------------------"
-  echo "Start running STACK AUGMENTED transformer_encoder for task=$JOB_NAME"
+  echo " 3) Start running *STANDARD* transformer_encoder for task=$JOB_NAME  *WITH* POSITIONAL ENCODING"
+  python ~/scratch/stack_Transformer/example_stack_t.py \
+      --batch_size 32 \
+      --training_steps 100000 \
+      --task "$JOB_NAME" \
+      --architecture transformer_encoder \
+      --stack=False \
+      --pos=ALIBI  \
+      --seed=0
+  echo "Finish running *STANDARD* transformer_encoder for task=$JOB_NAME *WITH* POSITIONAL ENCODING"
+
+  echo "---------------------------------------------------"
+  echo " 4) Start running *STACK AUGMENTED* transformer_encoder for task=$JOB_NAME *WITHOUT* POSITIONAL ENCODING"
   python ~/scratch/stack_Transformer/example_stack_t.py \
       --batch_size 32 \
       --training_steps 100000 \
@@ -80,6 +91,18 @@ for JOB_NAME in $TASKS; do
       --stack=True \
       --pos=NONE \
       --seed=0
-  echo "Finish running STACK AUGMENTED transformer_encoder for task=$JOB_NAME"
+  echo "Finish running *STACK AUGMENTED* transformer_encoder for task=$JOB_NAME *WITHOUT* POSITIONAL ENCODING"
+
+  echo "---------------------------------------------------"
+  echo " 5) Start running *STACK AUGMENTED* transformer_encoder for task=$JOB_NAME *WITH* POSITIONAL ENCODING"
+  python ~/scratch/stack_Transformer/example_stack_t.py \
+      --batch_size 32 \
+      --training_steps 100000 \
+      --task "$JOB_NAME" \
+      --architecture transformer_encoder \
+      --stack=True \
+      --pos=ALIBI \
+      --seed=0
+  echo "Finish running *STACK AUGMENTED* transformer_encoder for task=$JOB_NAME *WITH* POSITIONAL ENCODING"
 done
 
