@@ -24,7 +24,7 @@ import numpy as np
 import jax
 import os
 import random
-
+from absl import logging
 import sys
 sys.path.append('../../')
 
@@ -88,6 +88,13 @@ def main(unused_argv) -> None:
     max_range_test_length = 100
 
     is_autoregressive = False
+    logging.info(
+        "Log info:Training Architecture--- %s //PE--- %s //Using stack--- %s",
+        _ARCHITECTURE.value,
+        _POS.value,
+        _STACK.value,
+    )
+
     print("------------Current Architecture---------------:", _ARCHITECTURE.value)
     if 'transformer' in _ARCHITECTURE.value:
       causal_masking = False
