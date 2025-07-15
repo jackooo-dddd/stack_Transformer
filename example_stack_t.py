@@ -109,11 +109,11 @@ def main(unused_argv) -> None:
     # print("Curriculum values:", curriculum._values) [1, 2, 3, 4, 5......, 40]
     if _TASK.value == 'reverse_string':
       task = constants.TASK_BUILDERS[_TASK.value](2)
-    elif _TASK.value in ['solve_equation', 'modular_arithmetic_brackets']:
+    elif _TASK.value in ['solve_equation', 'modular_arithmetic_brackets', 'duplicate_string', 'modular_arithmetic', 'missing_duplicate_string', 'odds_first']:
       task = constants.TASK_BUILDERS[_TASK.value](5)
     else:
       task = constants.TASK_BUILDERS[_TASK.value]()
-
+      print(task)
     # Create the model.
 
     computation_steps_mult = 0 # number of computation steps will match the input sequence length

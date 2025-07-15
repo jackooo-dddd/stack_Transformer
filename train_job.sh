@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --time=0-22:22:00
+#SBATCH --time=1-12:22:00
 #SBATCH --account=def-vumaiha
 #SBATCH --mem=32000M
 #SBATCH --gpus-per-node=1

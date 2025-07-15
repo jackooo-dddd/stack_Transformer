@@ -151,14 +151,16 @@ class ModularArithmetic(task.GeneralizationTask):
     self._modulus = modulus
     if operators is None:
       operators = ('+', '*', '-')
-    self._operators = (OP_BY_CHARACTER[op] for op in operators)
+    self._operators = [OP_BY_CHARACTER[op] for op in operators]
+
+
 
   @functools.partial(jax.jit, static_argnums=(0, 2, 3))
   def sample_batch(
       self,
       rng: jnp.ndarray,
       batch_size: int,
-      sequence_length: int,
+      length: int,
   ) -> Mapping[str, jnp.ndarray]:
     """Returns a batch of modular arithmetic expressions and their labels.
 
@@ -169,6 +171,7 @@ class ModularArithmetic(task.GeneralizationTask):
         for the modular arithmetic dataset, if it's not, we force it to be by
         subtracting one to the length passed.
     """
+    sequence_length = length
     # Subtracting one to the length if it's not odd already.
     if sequence_length % 2 != 1:
       sequence_length -= 1
@@ -178,7 +181,7 @@ class ModularArithmetic(task.GeneralizationTask):
     remainders = jax.random.randint(rng1,
                                     (batch_size, sequence_length // 2 + 1), 0,
                                     self._modulus)
-    ops = self._modulus + jnp.array(list(self._operators))
+    ops = self._modulus + jnp.array(list(self._operators), dtype=jnp.int32)
 
     operations = jrandom.choice(rng2, ops, (batch_size, sequence_length // 2))
     batch = batch.at[:, ::2].set(remainders)
