@@ -113,7 +113,6 @@ def main(unused_argv) -> None:
       task = constants.TASK_BUILDERS[_TASK.value](5)
     else:
       task = constants.TASK_BUILDERS[_TASK.value]()
-      print(task)
     # Create the model.
 
     computation_steps_mult = 0 # number of computation steps will match the input sequence length
