@@ -110,6 +110,7 @@ def range_evaluation(
         'length': length,
         'accuracy': np.mean(sub_accuracies),
     }
-    logging.info(log_data)
+    print(log_data)
+    # logging.info(log_data)
     results.append(log_data)
   return results

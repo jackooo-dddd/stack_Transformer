@@ -41,7 +41,7 @@ mkdir -p result
 # Set task folder based on user input
 TASK_DIR=~/scratch/stack_Transformer/neural_networks_chomsky_hierarchy/tasks/$SUBDIR
 TASKS=$(find "$TASK_DIR" -name '*.py' ! -name 'task.py' -exec basename {} .py \;)
-echo "Running All $TASK_DIR Tasks"
+echo "Running All $SUBDIR Tasks"
 for JOB_NAME in $TASKS; do
   echo "===========Iteration for job with name: $JOB_NAME================"
   echo "---------------------------------------------------"
@@ -56,7 +56,6 @@ for JOB_NAME in $TASKS; do
       --pos=NONE \
       --seed=0
   echo "Finish STACK RNN for task=$JOB_NAME"
-  echo
 
   echo "---------------------------------------------------"
   echo "Start running STANDARD transformer_encoder for task=$JOB_NAME"
@@ -70,10 +69,9 @@ for JOB_NAME in $TASKS; do
       --pos=NONE \
       --seed=0
   echo "Finish STANDARD transformer_encoder for task=$JOB_NAME"
-  echo
 
   echo "---------------------------------------------------"
-  echo "Start running STACK ATTENTION transformer_encoder for task=$JOB_NAME"
+  echo "Start running STACK AUGMENTED transformer_encoder for task=$JOB_NAME"
   echo "---------------------------------------------------"
   python ~/scratch/stack_Transformer/example_stack_t.py \
       --batch_size 32 \
@@ -84,6 +82,5 @@ for JOB_NAME in $TASKS; do
       --pos=NONE \
       --seed=0
   echo "Finish STACK ATTENTION transformer_encoder for task=$JOB_NAME"
-  echo
 done
 
