@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --time=0-00:20:00
+#SBATCH --time=0-01:20:00
 #SBATCH --account=def-vumaiha
 #SBATCH --mem=32000M
 #SBATCH --gpus-per-node=1
@@ -43,13 +43,13 @@ TASK_DIR=~/scratch/stack_Transformer/neural_networks_chomsky_hierarchy/tasks/$SU
 TASKS=$(find "$TASK_DIR" -name '*.py' ! -name 'task.py' -exec basename {} .py \;)
 echo "Running All $SUBDIR Tasks"
 for JOB_NAME in $TASKS; do
-  echo "===========Iteration for job with name: $JOB_NAME================"
+  echo "===========Iteration For Job With Name: $JOB_NAME================"
   echo "---------------------------------------------------"
   echo "Start running STACK RNN for task=$JOB_NAME"
   echo "---------------------------------------------------"
   python ~/scratch/stack_Transformer/example_stack_t.py \
       --batch_size 32 \
-      --training_steps 100 \
+      --training_steps 10 \
       --task "$JOB_NAME" \
       --architecture stack_rnn \
       --stack=False \
@@ -62,7 +62,7 @@ for JOB_NAME in $TASKS; do
   echo "---------------------------------------------------"
   python ~/scratch/stack_Transformer/example_stack_t.py \
       --batch_size 32 \
-      --training_steps 100 \
+      --training_steps 10 \
       --task "$JOB_NAME" \
       --architecture transformer_encoder \
       --stack=False \
@@ -75,7 +75,7 @@ for JOB_NAME in $TASKS; do
   echo "---------------------------------------------------"
   python ~/scratch/stack_Transformer/example_stack_t.py \
       --batch_size 32 \
-      --training_steps 100 \
+      --training_steps 10 \
       --task "$JOB_NAME" \
       --architecture transformer_encoder \
       --stack=True \
