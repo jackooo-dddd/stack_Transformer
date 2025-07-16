@@ -1,27 +1,5 @@
 *******************RUNNING ALL regular TASKS*******************
 =================================================================
-===========ITERATION FOR JOB: modular_arithmetic==========================
-=================================================================
- 1) Start running STACK RNN for task=modular_arithmetic
-------------Current Architecture---------------: stack_rnn
-Finish running STACK RNN for task=modular_arithmetic
----------------------------------------------------
- 2) Start running *STANDARD* transformer_encoder for task=modular_arithmetic *WITHOUT* POSITIONAL ENCODING
-------------Current Architecture---------------: transformer_encoder
-Finish running *STANDARD* transformer_encoder for task=modular_arithmetic *WITHOUT* POSITIONAL ENCODING
----------------------------------------------------
- 3) Start running *STANDARD* transformer_encoder for task=modular_arithmetic  *WITH* POSITIONAL ENCODING
-------------Current Architecture---------------: transformer_encoder
-Finish running *STANDARD* transformer_encoder for task=modular_arithmetic *WITH* POSITIONAL ENCODING
----------------------------------------------------
- 4) Start running *STACK AUGMENTED* transformer_encoder for task=modular_arithmetic *WITHOUT* POSITIONAL ENCODING
-------------Current Architecture---------------: transformer_encoder
-Finish running *STACK AUGMENTED* transformer_encoder for task=modular_arithmetic *WITHOUT* POSITIONAL ENCODING
----------------------------------------------------
- 5) Start running *STACK AUGMENTED* transformer_encoder for task=modular_arithmetic *WITH* POSITIONAL ENCODING
-------------Current Architecture---------------: transformer_encoder
-Finish running *STACK AUGMENTED* transformer_encoder for task=modular_arithmetic *WITH* POSITIONAL ENCODING
-=================================================================
 ===========ITERATION FOR JOB: even_pairs==========================
 =================================================================
  1) Start running STACK RNN for task=even_pairs
