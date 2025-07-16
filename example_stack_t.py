@@ -173,7 +173,7 @@ def main(unused_argv) -> None:
         task=task,
         model=model,
         loss_fn=loss_fn,
-        learning_rate=1e-4,
+        learning_rate=5e-4,
         accuracy_fn=accuracy_fn,
         compute_full_range_test=True,
         max_range_test_length=max_range_test_length,

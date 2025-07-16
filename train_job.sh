@@ -4,8 +4,8 @@
 #SBATCH --mem=32000M
 #SBATCH --gpus-per-node=1
 #SBATCH --cpus-per-task=10
-#SBATCH --output=result/all_dcf_tasks.%j.out
-#SBATCH --error=result/all_dcf_tasks.%j.err
+#SBATCH --output=result/all_regular_learning_rate5e-4_tasks.%j.out
+#SBATCH --error=result/all_regular_learning_rate5e-4_tasks.%j.err
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
