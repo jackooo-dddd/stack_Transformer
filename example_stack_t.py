@@ -89,7 +89,8 @@ def main(unused_argv) -> None:
 
     is_autoregressive = False
     logging.info(
-        "Log info:Training Architecture--- %s //PE--- %s //Using stack--- %s",
+        "Log info:Training Task Name--- %s //Training Architecture--- %s //PE--- %s //Using stack--- %s",
+        _TASK.value,
         _ARCHITECTURE.value,
         _POS.value,
         _STACK.value,
@@ -116,7 +117,7 @@ def main(unused_argv) -> None:
     # print("Curriculum values:", curriculum._values) [1, 2, 3, 4, 5......, 40]
     if _TASK.value == 'reverse_string':
       task = constants.TASK_BUILDERS[_TASK.value](2)
-    elif _TASK.value in ['solve_equation', 'modular_arithmetic_brackets', 'duplicate_string', 'modular_arithmetic', 'missing_duplicate_string', 'odds_first']:
+    elif _TASK.value in ['solve_equation', 'modular_arithmetic_brackets', 'duplicate_string', 'modular_arithmetic', 'odds_first']:
       task = constants.TASK_BUILDERS[_TASK.value](5)
     else:
       task = constants.TASK_BUILDERS[_TASK.value]()
