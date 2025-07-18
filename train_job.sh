@@ -4,8 +4,8 @@
 #SBATCH --mem=32000M
 #SBATCH --gpus-per-node=1
 #SBATCH --cpus-per-task=10
-#SBATCH --output=result/all_regular_learning_rate5e-4_tasks.%j.out
-#SBATCH --error=result/all_regular_learning_rate5e-4_tasks.%j.err
+#SBATCH --output=result/regular_learning_rate5e-4_tasks.%j.out
+#SBATCH --error=result/TESTING5e-4_tasks.%j.err
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
@@ -49,7 +49,7 @@ for JOB_NAME in $TASKS; do
   echo " 1) Start running STACK RNN for task=$JOB_NAME"
   python ~/scratch/stack_Transformer/example_stack_t.py \
       --batch_size 32 \
-      --training_steps 100000 \
+      --training_steps 10 \
       --task "$JOB_NAME" \
       --architecture stack_rnn \
       --stack=False \
@@ -61,7 +61,7 @@ for JOB_NAME in $TASKS; do
   echo " 2) Start running *STANDARD* transformer_encoder for task=$JOB_NAME *WITHOUT* POSITIONAL ENCODING"
   python ~/scratch/stack_Transformer/example_stack_t.py \
       --batch_size 32 \
-      --training_steps 100000 \
+      --training_steps 10 \
       --task "$JOB_NAME" \
       --architecture transformer_encoder \
       --stack=False \
@@ -73,7 +73,7 @@ for JOB_NAME in $TASKS; do
   echo " 3) Start running *STANDARD* transformer_encoder for task=$JOB_NAME  *WITH* POSITIONAL ENCODING"
   python ~/scratch/stack_Transformer/example_stack_t.py \
       --batch_size 32 \
-      --training_steps 100000 \
+      --training_steps 10\
       --task "$JOB_NAME" \
       --architecture transformer_encoder \
       --stack=False \
@@ -85,7 +85,7 @@ for JOB_NAME in $TASKS; do
   echo " 4) Start running *STACK AUGMENTED* transformer_encoder for task=$JOB_NAME *WITHOUT* POSITIONAL ENCODING"
   python ~/scratch/stack_Transformer/example_stack_t.py \
       --batch_size 32 \
-      --training_steps 100000 \
+      --training_steps 10 \
       --task "$JOB_NAME" \
       --architecture transformer_encoder \
       --stack=True \
@@ -97,7 +97,7 @@ for JOB_NAME in $TASKS; do
   echo " 5) Start running *STACK AUGMENTED* transformer_encoder for task=$JOB_NAME *WITH* POSITIONAL ENCODING"
   python ~/scratch/stack_Transformer/example_stack_t.py \
       --batch_size 32 \
-      --training_steps 100000 \
+      --training_steps 10 \
       --task "$JOB_NAME" \
       --architecture transformer_encoder \
       --stack=True \
