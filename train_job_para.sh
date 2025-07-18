@@ -2,7 +2,7 @@
 #SBATCH --time=0-14:22:00
 #SBATCH --account=def-vumaiha
 #SBATCH --mem=32000M
-#SBATCH --gpus-per-node=5        # request GPUs equal to parallel tasks per JOB_NAME
+#SBATCH --gpus-per-node=4        # Cedar only has 4 GPUs/node
 #SBATCH --cpus-per-task=10
 #SBATCH --output=result/PARA_tasks.%j.out
 #SBATCH --error=result/PARA_tasks.%j.err
