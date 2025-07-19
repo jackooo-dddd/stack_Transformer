@@ -59,58 +59,53 @@ for JOB_NAME in $TASKS; do
   LOG5=${BASE}_stackaug_alibi.log; ERR5=${BASE}_stackaug_alibi.err
 
   (
-    echo "1) Start STACK RNN for task=$JOB_NAME at $(timestamp)"
-    srun --exclusive --exact --overlap -n1 --gres=gpu:1 \
-      --cpus-per-task=$SLURM_CPUS_PER_TASK \
+    echo "1) Start STACK RNN at $(timestamp)"
+    srun --exact --overlap -n1 --gres=gpu:1 --cpus-per-task=$SLURM_CPUS_PER_TASK \
       python ~/scratch/stack_Transformer/example_stack_t.py \
         --batch_size 32 --training_steps $STEPS \
         --task "$JOB_NAME" --architecture stack_rnn \
         --stack=False --pos=NONE --seed=0
-    echo "Finish STACK RNN for task=$JOB_NAME at $(timestamp)"
+    echo "Finish STACK RNN at $(timestamp)"
   ) 1> "$LOG1" 2> "$ERR1" &
 
   (
-    echo "2) Start TRANSFORMER (no PE) for task=$JOB_NAME at $(timestamp)"
-    srun --exclusive --exact --overlap -n1 --gres=gpu:1 \
-      --cpus-per-task=$SLURM_CPUS_PER_TASK \
+    echo "2) Start TRANSFORMER (no PE) at $(timestamp)"
+    srun --exact --overlap -n1 --gres=gpu:1 --cpus-per-task=$SLURM_CPUS_PER_TASK \
       python ~/scratch/stack_Transformer/example_stack_t.py \
         --batch_size 32 --training_steps $STEPS \
         --task "$JOB_NAME" --architecture transformer_encoder \
         --stack=False --pos=NONE --seed=0
-    echo "Finish TRANSFORMER (no PE) for task=$JOB_NAME at $(timestamp)"
+    echo "Finish TRANSFORMER (no PE) at $(timestamp)"
   ) 1> "$LOG2" 2> "$ERR2" &
 
   (
-    echo "3) Start TRANSFORMER (ALIBI) for task=$JOB_NAME at $(timestamp)"
-    srun --exclusive --exact --overlap -n1 --gres=gpu:1 \
-      --cpus-per-task=$SLURM_CPUS_PER_TASK \
+    echo "3) Start TRANSFORMER (ALIBI) at $(timestamp)"
+    srun --exact --overlap -n1 --gres=gpu:1 --cpus-per-task=$SLURM_CPUS_PER_TASK \
       python ~/scratch/stack_Transformer/example_stack_t.py \
         --batch_size 32 --training_steps $STEPS \
         --task "$JOB_NAME" --architecture transformer_encoder \
         --stack=False --pos=ALIBI --seed=0
-    echo "Finish TRANSFORMER (ALIBI) for task=$JOB_NAME at $(timestamp)"
+    echo "Finish TRANSFORMER (ALIBI) at $(timestamp)"
   ) 1> "$LOG3" 2> "$ERR3" &
 
   (
-    echo "4) Start STACK-AUG (no PE) for task=$JOB_NAME at $(timestamp)"
-    srun --exclusive --exact --overlap -n1 --gres=gpu:1 \
-      --cpus-per-task=$SLURM_CPUS_PER_TASK \
+    echo "4) Start STACK-AUG (no PE) at $(timestamp)"
+    srun --exact --overlap -n1 --gres=gpu:1 --cpus-per-task=$SLURM_CPUS_PER_TASK \
       python ~/scratch/stack_Transformer/example_stack_t.py \
         --batch_size 32 --training_steps $STEPS \
         --task "$JOB_NAME" --architecture transformer_encoder \
         --stack=True --pos=NONE --seed=0
-    echo "Finish STACK-AUG (no PE) for task=$JOB_NAME at $(timestamp)"
+    echo "Finish STACK-AUG (no PE) at $(timestamp)"
   ) 1> "$LOG4" 2> "$ERR4" &
 
   (
-    echo "5) Start STACK-AUG (ALIBI) for task=$JOB_NAME at $(timestamp)"
-    srun --exclusive --exact --overlap -n1 --gres=gpu:1 \
-      --cpus-per-task=$SLURM_CPUS_PER_TASK \
+    echo "5) Start STACK-AUG (ALIBI) at $(timestamp)"
+    srun --exact --overlap -n1 --gres=gpu:1 --cpus-per-task=$SLURM_CPUS_PER_TASK \
       python ~/scratch/stack_Transformer/example_stack_t.py \
         --batch_size 32 --training_steps $STEPS \
         --task "$JOB_NAME" --architecture transformer_encoder \
         --stack=True --pos=ALIBI --seed=0
-    echo "Finish STACK-AUG (ALIBI) for task=$JOB_NAME at $(timestamp)"
+    echo "Finish STACK-AUG (ALIBI) at $(timestamp)"
   ) 1> "$LOG5" 2> "$ERR5" &
 
   wait
@@ -122,3 +117,4 @@ for JOB_NAME in $TASKS; do
   combined_err="result/PARA_tasks.${SLURM_JOB_ID}.err"
   cat "$ERR1" "$ERR2" "$ERR3" "$ERR4" "$ERR5" > "$combined_err"
 done
+
