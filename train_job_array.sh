@@ -6,7 +6,7 @@
 #SBATCH --cpus-per-task=10
 #SBATCH --output=result/ARRAY_%x_%A_%a.out
 #SBATCH --error=result/ARRAY_%x_%A_%a.err
-#SBATCH --array=0-10
+#SBATCH --array=0-3
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
