@@ -85,7 +85,7 @@ def main(unused_argv) -> None:
     # architectures.
 
     sequence_length = 40 # Length for training
-    max_range_test_length = 100 # IMPORTANT
+    max_range_test_length = 10 # IMPORTANT
 
     is_autoregressive = False
     logging.info(

@@ -1,11 +1,11 @@
 #!/bin/bash
-#SBATCH --time=0-14:22:00
+#SBATCH --time=0-04:22:00
 #SBATCH --account=def-vumaiha
 #SBATCH --mem=32000M
 #SBATCH --gpus-per-node=4         # Cedar only has 4 GPUs/node
 #SBATCH --cpus-per-task=10
-#SBATCH --output=result/PARA_%x_%A_%a.out
-#SBATCH --error=result/PARA_%x_%A_%a.err
+#SBATCH --output=result/ARRAY_%x_%A_%a.out
+#SBATCH --error=result/ARRAY_%x_%A_%a.err
 #SBATCH --array=0-10
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
@@ -114,13 +114,12 @@ timestamp() { date '+%Y-%m-%d %H:%M:%S'; }
   echo "Finish STACK-AUG (ALIBI) at $(timestamp)"
 ) 1> "$LOG5" 2> "$ERR5" &
 
-# Wait for all runs\
+# Wait for all runs
 wait
 echo "=== Combined STDOUT for $JOB_NAME ==="
 cat "$LOG1" "$LOG2" "$LOG3" "$LOG4" "$LOG5"
 
 combined_err=${BASE}_all.err
   cat "$ERR1" "$ERR2" "$ERR3" "$ERR4" "$ERR5" > "$combined_err"
-  echo
 
 
