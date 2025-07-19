@@ -10,7 +10,7 @@
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
-# Check argument
+# Check arguments
 if [[ -z "$1" ]]; then
   echo "Usage: $0 {cs|dcf|regular}"
   exit 1
