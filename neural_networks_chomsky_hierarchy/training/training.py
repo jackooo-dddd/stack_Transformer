@@ -206,6 +206,7 @@ class TrainingWorker:
         optax.adam(training_params.learning_rate))
     ## Use dummy_batch to warm up the model.
     # Calls model.init(...) to randomly initialize all weights
+
     dummy_batch = task.sample_batch(
         next(rng_seq), length=10, batch_size=training_params.batch_size)
     model_init_rng_key = jax.random.PRNGKey(training_params.model_init_seed)

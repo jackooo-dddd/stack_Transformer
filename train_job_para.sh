@@ -4,8 +4,8 @@
 #SBATCH --mem=32000M
 #SBATCH --gpus-per-node=4         # Cedar only has 4 GPUs/node
 #SBATCH --cpus-per-task=10
-#SBATCH --output=result/PARA_tasks.%j.out
-#SBATCH --error=result/PARA_tasks.%j.err
+#SBATCH --output=result/PARA_tasks_regular.%j.out
+#SBATCH --error=result/PARA_tasks_regular.%j.err
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
@@ -15,7 +15,7 @@ if [[ -z "$1" ]]; then
   exit 1
 fi
 SUBDIR=$1
-STEPS=5
+STEPS=100000
 
 if [[ "$SUBDIR" != "cs" && "$SUBDIR" != "dcf" && "$SUBDIR" != "regular" ]]; then
   echo "Invalid argument: $SUBDIR"
@@ -38,17 +38,21 @@ EOF
 echo "Logging to result/ and result/${SUBDIR}/ with $STEPS training steps"
 mkdir -p result/${SUBDIR}
 
-# Discover tasks
+# Discover tasks into an array
 TASK_DIR=~/scratch/stack_Transformer/neural_networks_chomsky_hierarchy/tasks/$SUBDIR
-TASKS=$(find "$TASK_DIR" -name '*.py' ! -name 'task.py' -exec basename {} .py \;)
-echo "******************* RUNNING ALL $SUBDIR TASKS *******************"
+mapfile -t TASKS < <(find "$TASK_DIR" -name '*.py' ! -name 'task.py' -exec basename {} .py \;)
+TOTAL=${#TASKS[@]}
+
+echo "Found $TOTAL tasks in '$SUBDIR'"
 
 timestamp() { date '+%Y-%m-%d %H:%M:%S'; }
 
-for JOB_NAME in $TASKS; do
+# Iterate with index to show progress
+for idx in "${!TASKS[@]}"; do
+  JOB_NAME=${TASKS[$idx]}
   echo
   echo "================================================================="
-  echo "=========== ITERATION FOR JOB: $JOB_NAME =========================="
+  echo "=========== TASK $((idx+1)) of $TOTAL : $JOB_NAME =================="
   echo "================================================================="
 
   BASE=result/${SUBDIR}/${JOB_NAME}
@@ -117,4 +121,3 @@ for JOB_NAME in $TASKS; do
   combined_err="result/PARA_tasks.${SLURM_JOB_ID}.err"
   cat "$ERR1" "$ERR2" "$ERR3" "$ERR4" "$ERR5" > "$combined_err"
 done
-

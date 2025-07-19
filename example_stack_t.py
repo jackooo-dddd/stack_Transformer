@@ -27,7 +27,7 @@ import random
 from absl import logging
 import sys
 sys.path.append('../../')
-
+import logging
 from neural_networks_chomsky_hierarchy.training import constants
 from neural_networks_chomsky_hierarchy.training import curriculum as curriculum_lib
 from neural_networks_chomsky_hierarchy.training import training
@@ -76,6 +76,8 @@ _POS = flags.DEFINE_string(
 # Use the stacked Transformer or not.
 _STACK = flags.DEFINE_boolean('stack', default=False, help='Set true to use stack')
 def main(unused_argv) -> None:
+  # Silence TPU backend warning from JAX
+  logging.getLogger("jax._src.xla_bridge").setLevel(logging.ERROR)
   scores = []
   for seed in _SEED.value:
     seed = int(seed)
@@ -90,13 +92,12 @@ def main(unused_argv) -> None:
     is_autoregressive = False
     logging.info("====================================")
     logging.info(
-        "Log info:Training Task Name--- %s //Training Architecture--- %s //PE--- %s //Using stack--- %s",
+        "********Log info*********:Task--- %s //Training Architecture--- %s //PE--- %s //Using stack--- %s",
         _TASK.value,
         _ARCHITECTURE.value,
         _POS.value,
         _STACK.value,
     )
-    logging.info("====================================")
     if 'transformer' in _ARCHITECTURE.value:
       causal_masking = False
       if _ARCHITECTURE.value == 'transformer_decoder':
@@ -194,8 +195,9 @@ def main(unused_argv) -> None:
             info_dict['log'] = eval_results
         logging.info(f"Learning rate: {learning_rate}")
         logging.info(f"Average Accuracy: {score}")
-        logging.info(f"Eval results: {eval_results!r}")
-        logging.info("--------------------------")
+        # for log in eval_results:
+        #     logging.info(log)
+        logging.info("------------------------------------------------------------")
 
     print("Best learning rate:", info_dict['learning_rate'])
     print("Best accuracy:", highest_accuracy)

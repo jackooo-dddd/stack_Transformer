@@ -48,6 +48,7 @@ class ParityCheck(task.GeneralizationTask):
     n_b = jnp.sum(strings, axis=1) % 2
     n_b = jnn.one_hot(n_b, num_classes=2)
     one_hot_strings = jnn.one_hot(strings, num_classes=2)
+    # print("input", one_hot_strings, "output", n_b)
     return {"input": one_hot_strings, "output": n_b}
 
   @property
