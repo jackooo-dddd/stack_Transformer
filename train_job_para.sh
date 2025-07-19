@@ -121,12 +121,9 @@ for JOB_NAME in $TASKS; do
   echo "All variants finished for task=$JOB_NAME at $(timestamp)"
 
   # Concatenate stdout logs in order
-  echo
   echo "------ Combined STDOUT Logs for $JOB_NAME ------"
   cat "$LOG1" "$LOG2" "$LOG3" "$LOG4" "$LOG5"
-
   # Combine and display stderr logs
-  combined_err=${BASE}_all.err
+  combined_err="result/PARA_tasks.${SLURM_JOB_ID}.err"
   cat "$ERR1" "$ERR2" "$ERR3" "$ERR4" "$ERR5" > "$combined_err"
-  echo
 done

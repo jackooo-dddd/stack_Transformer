@@ -88,6 +88,7 @@ def main(unused_argv) -> None:
     max_range_test_length = 100 # IMPORTANT
 
     is_autoregressive = False
+    logging.info("====================================")
     logging.info(
         "Log info:Training Task Name--- %s //Training Architecture--- %s //PE--- %s //Using stack--- %s",
         _TASK.value,
@@ -95,8 +96,7 @@ def main(unused_argv) -> None:
         _POS.value,
         _STACK.value,
     )
-
-    print("------------Current Architecture---------------:", _ARCHITECTURE.value)
+    logging.info("====================================")
     if 'transformer' in _ARCHITECTURE.value:
       causal_masking = False
       if _ARCHITECTURE.value == 'transformer_decoder':
@@ -187,15 +187,16 @@ def main(unused_argv) -> None:
         ## training_worker.run() return the training acc/testing acc/trained paras
         _, eval_results, _ = training_worker.run()
         accuracies = [r['accuracy'] for r in eval_results]
-        score = np.mean(accuracies)  # ← no indexing
+        score = np.mean(accuracies)
         if score > highest_accuracy:
             info_dict['learning_rate'] = learning_rate
             highest_accuracy = score
             info_dict['log'] = eval_results
-        print("Learning rate:", learning_rate)
-        print(score)
-        print(eval_results)
-        print("--------------------------")
+        logging.info(f"Learning rate: {learning_rate}")
+        logging.info(f"Average Accuracy: {score}")
+        logging.info(f"Eval results: {eval_results!r}")
+        logging.info("--------------------------")
+
     print("Best learning rate:", info_dict['learning_rate'])
     print("Best accuracy:", highest_accuracy)
     for log in info_dict['log']:
