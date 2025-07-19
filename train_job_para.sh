@@ -2,7 +2,7 @@
 #SBATCH --time=0-14:22:00
 #SBATCH --account=def-vumaiha
 #SBATCH --mem=32000M
-#SBATCH --gpus-per-node=4        # Cedar only has 4 GPUs/node
+#SBATCH --gpus-per-node=4         # Cedar only has 4 GPUs/node
 #SBATCH --cpus-per-task=10
 #SBATCH --output=result/PARA_tasks.%j.out
 #SBATCH --error=result/PARA_tasks.%j.err
@@ -15,7 +15,7 @@ if [[ -z "$1" ]]; then
   exit 1
 fi
 SUBDIR=$1
-STEPS=10  # fixed number of training steps
+STEPS = 5
 
 if [[ "$SUBDIR" != "cs" && "$SUBDIR" != "dcf" && "$SUBDIR" != "regular" ]]; then
   echo "Invalid argument: $SUBDIR"
@@ -38,10 +38,15 @@ EOF
 echo "Logging to result/ and result/${SUBDIR}/ with $STEPS training steps"
 mkdir -p result/${SUBDIR}
 
+# Discover tasks
 TASK_DIR=~/scratch/stack_Transformer/neural_networks_chomsky_hierarchy/tasks/$SUBDIR
 TASKS=$(find "$TASK_DIR" -name '*.py' ! -name 'task.py' -exec basename {} .py \;)
 echo "******************* RUNNING ALL $SUBDIR TASKS *******************"
 
+# Function to prepend timestamp
+timestamp() { date '+%Y-%m-%d %H:%M:%S'; }
+
+# Loop over each task
 for JOB_NAME in $TASKS; do
   echo
   echo "================================================================="
@@ -49,78 +54,84 @@ for JOB_NAME in $TASKS; do
   echo "================================================================="
 
   # Define per-variant log files
-  LOG1=result/${SUBDIR}/${JOB_NAME}_stack_rnn.log
-  LOG2=result/${SUBDIR}/${JOB_NAME}_trans_npe.log
-  LOG3=result/${SUBDIR}/${JOB_NAME}_trans_alibi.log
-  LOG4=result/${SUBDIR}/${JOB_NAME}_stackaug_npe.log
-  LOG5=result/${SUBDIR}/${JOB_NAME}_stackaug_alibi.log
+  BASE=result/${SUBDIR}/${JOB_NAME}
+  LOG1=${BASE}_stack_rnn.log; ERR1=${BASE}_stack_rnn.err
+  LOG2=${BASE}_trans_npe.log; ERR2=${BASE}_trans_npe.err
+  LOG3=${BASE}_trans_alibi.log; ERR3=${BASE}_trans_alibi.err
+  LOG4=${BASE}_stackaug_npe.log; ERR4=${BASE}_stackaug_npe.err
+  LOG5=${BASE}_stackaug_alibi.log; ERR5=${BASE}_stackaug_alibi.err
 
   # 1) STACK RNN
   (
-    echo "1) Start STACK RNN for task=$JOB_NAME"
+    echo "1) Start STACK RNN for task=$JOB_NAME at $(timestamp)"
+    local start1=$(timestamp)
     srun --exclusive -n1 --gres=gpu:1 \
       python ~/scratch/stack_Transformer/example_stack_t.py \
         --batch_size 32 --training_steps $STEPS \
         --task "$JOB_NAME" --architecture stack_rnn \
         --stack=False --pos=NONE --seed=0
-    echo "Finish STACK RNN for task=$JOB_NAME"
-  ) &> "$LOG1" &
+    echo "Finish STACK RNN for task=$JOB_NAME at $(timestamp)"
+  ) 1> "$LOG1" 2> "$ERR1" &
 
   # 2) TRANSFORMER no PE
   (
-    echo "2) Start TRANSFORMER (no PE) for task=$JOB_NAME"
+    echo "2) Start TRANSFORMER (no PE) for task=$JOB_NAME at $(timestamp)"
     srun --exclusive -n1 --gres=gpu:1 \
       python ~/scratch/stack_Transformer/example_stack_t.py \
         --batch_size 32 --training_steps $STEPS \
         --task "$JOB_NAME" --architecture transformer_encoder \
         --stack=False --pos=NONE --seed=0
-    echo "Finish TRANSFORMER (no PE) for task=$JOB_NAME"
-  ) &> "$LOG2" &
+    echo "Finish TRANSFORMER (no PE) for task=$JOB_NAME at $(timestamp)"
+  ) 1> "$LOG2" 2> "$ERR2" &
 
   # 3) TRANSFORMER with ALIBI
   (
-    echo "3) Start TRANSFORMER (ALIBI) for task=$JOB_NAME"
+    echo "3) Start TRANSFORMER (ALIBI) for task=$JOB_NAME at $(timestamp)"
     srun --exclusive -n1 --gres=gpu:1 \
       python ~/scratch/stack_Transformer/example_stack_t.py \
         --batch_size 32 --training_steps $STEPS \
         --task "$JOB_NAME" --architecture transformer_encoder \
         --stack=False --pos=ALIBI --seed=0
-    echo "Finish TRANSFORMER (ALIBI) for task=$JOB_NAME"
-  ) &> "$LOG3" &
+    echo "Finish TRANSFORMER (ALIBI) for task=$JOB_NAME at $(timestamp)"
+  ) 1> "$LOG3" 2> "$ERR3" &
 
   # 4) STACK-AUG no PE
   (
-    echo "4) Start STACK-AUG (no PE) for task=$JOB_NAME"
+    echo "4) Start STACK-AUG (no PE) for task=$JOB_NAME at $(timestamp)"
     srun --exclusive -n1 --gres=gpu:1 \
       python ~/scratch/stack_Transformer/example_stack_t.py \
         --batch_size 32 --training_steps $STEPS \
         --task "$JOB_NAME" --architecture transformer_encoder \
         --stack=True --pos=NONE --seed=0
-    echo "Finish STACK-AUG (no PE) for task=$JOB_NAME"
-  ) &> "$LOG4" &
+    echo "Finish STACK-AUG (no PE) for task=$JOB_NAME at $(timestamp)"
+  ) 1> "$LOG4" 2> "$ERR4" &
 
   # 5) STACK-AUG with ALIBI
   (
-    echo "5) Start STACK-AUG (ALIBI) for task=$JOB_NAME"
+    echo "5) Start STACK-AUG (ALIBI) for task=$JOB_NAME at $(timestamp)"
     srun --exclusive -n1 --gres=gpu:1 \
       python ~/scratch/stack_Transformer/example_stack_t.py \
         --batch_size 32 --training_steps $STEPS \
         --task "$JOB_NAME" --architecture transformer_encoder \
         --stack=True --pos=ALIBI --seed=0
-    echo "Finish STACK-AUG (ALIBI) for task=$JOB_NAME"
-  ) &> "$LOG5" &
+    echo "Finish STACK-AUG (ALIBI) for task=$JOB_NAME at $(timestamp)"
+  ) 1> "$LOG5" 2> "$ERR5" &
 
   # Wait for all 5 to complete
   wait
-  echo "All variants finished for task=$JOB_NAME"
+  echo "All variants finished for task=$JOB_NAME at $(timestamp)"
 
-  # Concatenate logs in order back to STDOUT
+  # Concatenate stdout logs in order
   echo
-  echo "------ Combined Logs for $JOB_NAME ------"
-  for LOG in "$LOG1" "$LOG2" "$LOG3" "$LOG4" "$LOG5"; do
-    echo "### $(basename "$LOG") ###"
-    cat "$LOG"
-    echo
-  done
+  echo "------ Combined STDOUT Logs for $JOB_NAME ------"
+  cat "$LOG1" "$LOG2" "$LOG3" "$LOG4" "$LOG5"
+
+  # Combine and display stderr logs
+  combined_err=${BASE}_all.err
+  cat "$ERR1" "$ERR2" "$ERR3" "$ERR4" "$ERR5" > "$combined_err"
+  echo
+  echo "------ Combined STDERR Logs for $JOB_NAME (in $combined_err) ------"
+  cat "$combined_err"
 
 done
+
