@@ -23,6 +23,7 @@ if [[ "$SUBDIR" != "cs" && "$SUBDIR" != "dcf" && "$SUBDIR" != "regular" ]]; then
   exit 1
 fi
 
+# Load environment
 module load python/3.12
 module load cuda/12.6
 source ~/envs/stack_t/bin/activate
@@ -34,7 +35,6 @@ print("JAX version:", jax.__version__)
 print("Devices:", jax.devices())
 EOF
 
-# Ensure result directories exist
 echo "Logging to result/ and result/${SUBDIR}/ with $STEPS training steps"
 mkdir -p result/${SUBDIR}
 
@@ -43,17 +43,14 @@ TASK_DIR=~/scratch/stack_Transformer/neural_networks_chomsky_hierarchy/tasks/$SU
 TASKS=$(find "$TASK_DIR" -name '*.py' ! -name 'task.py' -exec basename {} .py \;)
 echo "******************* RUNNING ALL $SUBDIR TASKS *******************"
 
-# Function to prepend timestamp
 timestamp() { date '+%Y-%m-%d %H:%M:%S'; }
 
-# Loop over each task
 for JOB_NAME in $TASKS; do
   echo
   echo "================================================================="
   echo "=========== ITERATION FOR JOB: $JOB_NAME =========================="
   echo "================================================================="
 
-  # Define per-variant log files
   BASE=result/${SUBDIR}/${JOB_NAME}
   LOG1=${BASE}_stack_rnn.log; ERR1=${BASE}_stack_rnn.err
   LOG2=${BASE}_trans_npe.log; ERR2=${BASE}_trans_npe.err
@@ -61,10 +58,10 @@ for JOB_NAME in $TASKS; do
   LOG4=${BASE}_stackaug_npe.log; ERR4=${BASE}_stackaug_npe.err
   LOG5=${BASE}_stackaug_alibi.log; ERR5=${BASE}_stackaug_alibi.err
 
-  # 1) STACK RNN
   (
     echo "1) Start STACK RNN for task=$JOB_NAME at $(timestamp)"
-    srun --exclusive -n1 --gres=gpu:1 \
+    srun --exclusive --exact --overlap -n1 --gres=gpu:1 \
+      --cpus-per-task=$SLURM_CPUS_PER_TASK \
       python ~/scratch/stack_Transformer/example_stack_t.py \
         --batch_size 32 --training_steps $STEPS \
         --task "$JOB_NAME" --architecture stack_rnn \
@@ -72,10 +69,10 @@ for JOB_NAME in $TASKS; do
     echo "Finish STACK RNN for task=$JOB_NAME at $(timestamp)"
   ) 1> "$LOG1" 2> "$ERR1" &
 
-  # 2) TRANSFORMER no PE
   (
     echo "2) Start TRANSFORMER (no PE) for task=$JOB_NAME at $(timestamp)"
-    srun --exclusive -n1 --gres=gpu:1 \
+    srun --exclusive --exact --overlap -n1 --gres=gpu:1 \
+      --cpus-per-task=$SLURM_CPUS_PER_TASK \
       python ~/scratch/stack_Transformer/example_stack_t.py \
         --batch_size 32 --training_steps $STEPS \
         --task "$JOB_NAME" --architecture transformer_encoder \
@@ -83,10 +80,10 @@ for JOB_NAME in $TASKS; do
     echo "Finish TRANSFORMER (no PE) for task=$JOB_NAME at $(timestamp)"
   ) 1> "$LOG2" 2> "$ERR2" &
 
-  # 3) TRANSFORMER with ALIBI
   (
     echo "3) Start TRANSFORMER (ALIBI) for task=$JOB_NAME at $(timestamp)"
-    srun --exclusive -n1 --gres=gpu:1 \
+    srun --exclusive --exact --overlap -n1 --gres=gpu:1 \
+      --cpus-per-task=$SLURM_CPUS_PER_TASK \
       python ~/scratch/stack_Transformer/example_stack_t.py \
         --batch_size 32 --training_steps $STEPS \
         --task "$JOB_NAME" --architecture transformer_encoder \
@@ -94,10 +91,10 @@ for JOB_NAME in $TASKS; do
     echo "Finish TRANSFORMER (ALIBI) for task=$JOB_NAME at $(timestamp)"
   ) 1> "$LOG3" 2> "$ERR3" &
 
-  # 4) STACK-AUG no PE
   (
     echo "4) Start STACK-AUG (no PE) for task=$JOB_NAME at $(timestamp)"
-    srun --exclusive -n1 --gres=gpu:1 \
+    srun --exclusive --exact --overlap -n1 --gres=gpu:1 \
+      --cpus-per-task=$SLURM_CPUS_PER_TASK \
       python ~/scratch/stack_Transformer/example_stack_t.py \
         --batch_size 32 --training_steps $STEPS \
         --task "$JOB_NAME" --architecture transformer_encoder \
@@ -105,10 +102,10 @@ for JOB_NAME in $TASKS; do
     echo "Finish STACK-AUG (no PE) for task=$JOB_NAME at $(timestamp)"
   ) 1> "$LOG4" 2> "$ERR4" &
 
-  # 5) STACK-AUG with ALIBI
   (
     echo "5) Start STACK-AUG (ALIBI) for task=$JOB_NAME at $(timestamp)"
-    srun --exclusive -n1 --gres=gpu:1 \
+    srun --exclusive --exact --overlap -n1 --gres=gpu:1 \
+      --cpus-per-task=$SLURM_CPUS_PER_TASK \
       python ~/scratch/stack_Transformer/example_stack_t.py \
         --batch_size 32 --training_steps $STEPS \
         --task "$JOB_NAME" --architecture transformer_encoder \
@@ -116,14 +113,12 @@ for JOB_NAME in $TASKS; do
     echo "Finish STACK-AUG (ALIBI) for task=$JOB_NAME at $(timestamp)"
   ) 1> "$LOG5" 2> "$ERR5" &
 
-  # Wait for all 5 to complete
   wait
   echo "All variants finished for task=$JOB_NAME at $(timestamp)"
 
-  # Concatenate stdout logs in order
   echo "------ Combined STDOUT Logs for $JOB_NAME ------"
   cat "$LOG1" "$LOG2" "$LOG3" "$LOG4" "$LOG5"
-  # Combine and display stderr logs
+
   combined_err="result/PARA_tasks.${SLURM_JOB_ID}.err"
   cat "$ERR1" "$ERR2" "$ERR3" "$ERR4" "$ERR5" > "$combined_err"
 done
