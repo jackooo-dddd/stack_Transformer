@@ -85,7 +85,7 @@ def main(unused_argv) -> None:
     # architectures.
 
     sequence_length = 40 # Length for training
-    max_range_test_length = 5
+    max_range_test_length = 10 # IMPORTANT
 
     is_autoregressive = False
     logging.info(
@@ -161,37 +161,54 @@ def main(unused_argv) -> None:
     def accuracy_fn(output, target):
       mask = task.accuracy_mask(target)
       return jnp.sum(mask * task.accuracy_fn(output, target)) / jnp.sum(mask)
+    all_learning_rate = [5e-4]
+    highest_accuracy = 0
+    info_dict = {}
+    for learning_rate in all_learning_rate:
+        # Create the final training parameters.
+        training_params = training.ClassicTrainingParams(
+            seed=seed,
+            model_init_seed=seed,
+            training_steps=_TRAINING_STEPS.value,
+            log_frequency=100,
+            length_curriculum=curriculum,
+            batch_size=_BATCH_SIZE.value,
+            task=task,
+            model=model,
+            loss_fn=loss_fn,
+            learning_rate=learning_rate,
+            accuracy_fn=accuracy_fn,
+            compute_full_range_test=True,
+            max_range_test_length=max_range_test_length,
+            range_test_total_batch_size=512,
+            range_test_sub_batch_size=32,
+            is_autoregressive=is_autoregressive)
+        training_worker = training.TrainingWorker(training_params, use_tqdm=True)
+        ## training_worker.run() return the training acc/testing acc/trained paras
+        _, eval_results, _ = training_worker.run()
+        accuracies = [r['accuracy'] for r in eval_results]
+        score = np.mean(accuracies)  # ← no indexing
+        if score > highest_accuracy:
+            info_dict['learning_rate'] = learning_rate
+            highest_accuracy = score
+            info_dict['log'] = eval_results
+        print(score)
+        print(eval_results)
+        print("--------------------------")
+    print("Best learning rate:", info_dict['learning_rate'])
+    print("Best accuracy:", highest_accuracy)
+    for log in info_dict['log']:
+        print(log)
 
-    # Create the final training parameters.
-    training_params = training.ClassicTrainingParams(
-        seed=seed,
-        model_init_seed=seed,
-        training_steps=_TRAINING_STEPS.value,
-        log_frequency=100,
-        length_curriculum=curriculum,
-        batch_size=_BATCH_SIZE.value,
-        task=task,
-        model=model,
-        loss_fn=loss_fn,
-        learning_rate=5e-4,
-        accuracy_fn=accuracy_fn,
-        compute_full_range_test=True,
-        max_range_test_length=max_range_test_length,
-        range_test_total_batch_size=512,
-        range_test_sub_batch_size=32,
-        is_autoregressive=is_autoregressive)
-
-    training_worker = training.TrainingWorker(training_params, use_tqdm=True)
-    ## training_worker.run() return the training acc/testing acc/trained paras
-    _, eval_results, _ = training_worker.run()
-
-    # Gather results and print final score.
-    """
-    Shunqi: We do not consider the final score as we have skipped some evaluations so the sequence length is not our
-    number of test cases we used.
-    """
+    # """
+    # Shunqi: We do not consider the final score as we have skipped some evaluations so the sequence length is not our
+    # number of test cases we used.
+    # """
     # accuracies = [r['accuracy'] for r in eval_results]
-    # score = np.mean(accuracies[sequence_length + 1:])
+    # score = np.mean(accuracies)  # ← no indexing
+    #
+    # for log in eval_results:    # DO the accuracy logging here
+    #     print(log)
   #   print(f'seed: {seed}')
   #   print(f'Network score: {score}')
   #   scores.append(score)

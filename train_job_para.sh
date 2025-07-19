@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --time=0-14:22:00
+#SBATCH --time=0-04:22:00
 #SBATCH --account=def-vumaiha
 #SBATCH --mem=32000M
 #SBATCH --gpus-per-node=4         # Cedar only has 4 GPUs/node
@@ -15,7 +15,7 @@ if [[ -z "$1" ]]; then
   exit 1
 fi
 SUBDIR=$1
-STEPS = 5
+STEPS=5
 
 if [[ "$SUBDIR" != "cs" && "$SUBDIR" != "dcf" && "$SUBDIR" != "regular" ]]; then
   echo "Invalid argument: $SUBDIR"
@@ -64,7 +64,6 @@ for JOB_NAME in $TASKS; do
   # 1) STACK RNN
   (
     echo "1) Start STACK RNN for task=$JOB_NAME at $(timestamp)"
-    local start1=$(timestamp)
     srun --exclusive -n1 --gres=gpu:1 \
       python ~/scratch/stack_Transformer/example_stack_t.py \
         --batch_size 32 --training_steps $STEPS \
@@ -130,8 +129,4 @@ for JOB_NAME in $TASKS; do
   combined_err=${BASE}_all.err
   cat "$ERR1" "$ERR2" "$ERR3" "$ERR4" "$ERR5" > "$combined_err"
   echo
-  echo "------ Combined STDERR Logs for $JOB_NAME (in $combined_err) ------"
-  cat "$combined_err"
-
 done
-
