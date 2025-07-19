@@ -85,7 +85,7 @@ def main(unused_argv) -> None:
     # architectures.
 
     sequence_length = 40 # Length for training
-    max_range_test_length = 10 # IMPORTANT
+    max_range_test_length = 100 # IMPORTANT
 
     is_autoregressive = False
     logging.info(
@@ -161,7 +161,7 @@ def main(unused_argv) -> None:
     def accuracy_fn(output, target):
       mask = task.accuracy_mask(target)
       return jnp.sum(mask * task.accuracy_fn(output, target)) / jnp.sum(mask)
-    all_learning_rate = [5e-4]
+    all_learning_rate = [1e-3, 5e-4, 3e-4, 1e-4]
     highest_accuracy = 0
     info_dict = {}
     for learning_rate in all_learning_rate:
@@ -192,6 +192,7 @@ def main(unused_argv) -> None:
             info_dict['learning_rate'] = learning_rate
             highest_accuracy = score
             info_dict['log'] = eval_results
+        print("Learning rate:", learning_rate)
         print(score)
         print(eval_results)
         print("--------------------------")
