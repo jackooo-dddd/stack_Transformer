@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --time=1-05:22:00
+#SBATCH --time=0-12:00:00
 #SBATCH --account=def-vumaiha
 #SBATCH --mem=32000M
 #SBATCH --gpus-per-node=4         # Cedar only has 4 GPUs/node
