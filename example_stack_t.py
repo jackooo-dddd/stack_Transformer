@@ -162,7 +162,7 @@ def main(unused_argv) -> None:
     def accuracy_fn(output, target):
       mask = task.accuracy_mask(target)
       return jnp.sum(mask * task.accuracy_fn(output, target)) / jnp.sum(mask)
-    all_learning_rate = [1e-3, 5e-4, 3e-4, 1e-4]
+    all_learning_rate = [1e-3, 5e-4, 1e-4, 5e-5]
     highest_accuracy = 0
     info_dict = {}
     for learning_rate in all_learning_rate:
