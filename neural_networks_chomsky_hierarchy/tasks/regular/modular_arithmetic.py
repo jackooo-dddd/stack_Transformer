@@ -178,6 +178,8 @@ class ModularArithmetic(task.GeneralizationTask):
 
     batch = jnp.empty((batch_size, sequence_length), dtype=int)
     rng1, rng2 = jax.random.split(rng)
+    """Creates a matrix of size (batch_size × number_of_operands) filled with random integers 
+    from 0 up to modulus − 1, using rng1 as the random seed."""
     remainders = jax.random.randint(rng1,
                                     (batch_size, sequence_length // 2 + 1), 0,
                                     self._modulus)
@@ -192,6 +194,19 @@ class ModularArithmetic(task.GeneralizationTask):
     labels = jnn.one_hot(labels, self._modulus)
     one_hot_expressions = jnn.one_hot(expressions,
                                       self._modulus + len(OP_BY_CHARACTER))
+    """
+    remainders[1] = [2, 4, 2, 0, 4]
+    operations[1] = [6, 5, 7, 6]
+    label[1]      = [0., 0., 0., 0., 1.]
+    6 → '-'   (5+1)
+    5 → '+'   (5+0)
+    7 → '*'   (5+2)
+    6 → '-'
+    2  -  4  +  2  *  0  -  4 => modulus 5 gives u 4.
+    """
+    # jax.debug.print("remainders = {}", remainders)
+    # jax.debug.print("operations = {}", operations)
+    # jax.debug.print("labels = {}", labels)
     return {'input': one_hot_expressions, 'output': labels}
 
   @property

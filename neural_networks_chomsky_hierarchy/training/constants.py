@@ -39,6 +39,7 @@ from neural_networks_chomsky_hierarchy.tasks.regular import cycle_navigation
 from neural_networks_chomsky_hierarchy.tasks.regular import even_pairs
 from neural_networks_chomsky_hierarchy.tasks.regular import modular_arithmetic
 from neural_networks_chomsky_hierarchy.tasks.regular import parity_check
+from neural_networks_chomsky_hierarchy.tasks.counter import dyck
 from neural_networks_chomsky_hierarchy.training import curriculum as curriculum_lib
 
 MODEL_BUILDERS = {
@@ -111,6 +112,8 @@ TASK_BUILDERS = {
         stack_manipulation.StackManipulation,
     'bucket_sort':
         bucket_sort.BucketSort,
+    'dyck':
+        dyck.Dyck1,
 }
 
 TASK_LEVELS = {

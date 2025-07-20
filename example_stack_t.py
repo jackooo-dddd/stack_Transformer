@@ -185,8 +185,9 @@ def main(unused_argv) -> None:
             range_test_sub_batch_size=32,
             is_autoregressive=is_autoregressive)
         training_worker = training.TrainingWorker(training_params, use_tqdm=True)
-        ## training_worker.run() return the training acc/testing acc/trained paras
-        _, eval_results, _ = training_worker.run()
+        ## training_worker.run() return the training acc/testing acc/trained paras, where actual training happens.
+        training_results, eval_results, _ = training_worker.run()
+        # print("Training results:", training_results)
         accuracies = [r['accuracy'] for r in eval_results]
         score = np.mean(accuracies)
         if score > highest_accuracy:

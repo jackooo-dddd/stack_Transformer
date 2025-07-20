@@ -76,36 +76,43 @@ def range_evaluation(
   if use_tqdm:
     lengths = tqdm.tqdm(lengths)
   for length in lengths:
-    """
-    Edited by shunqi: Remove some unecessary evaluations to save time
-    """
-    # print(length)
+    """shunqi: Remove some unecessary evaluations to save time"""
     if length % 4 != 0:
       continue
     # We need to clear the cache of jitted functions, to avoid overflow as we
     # are jitting len(lengths) ones, which can be a lot.
     apply_fn.clear_cache()
     sub_accuracies = []
-    ## Splits the total evaluation workload into smaller sub-batches.
-    ## if total_batch_size=512 and sub_batch_size=32, this loop runs 16 times.
     for _ in range(eval_params.total_batch_size // eval_params.sub_batch_size):
       batch = eval_params.sample_batch(
-          next(rng_seq), eval_params.sub_batch_size, length)
-      ## Get the outputs from the trained model.
-      ## AR model requires the output from last timestamp as the input.
+        next(rng_seq), eval_params.sub_batch_size, length)
+
+      # Get model outputs
       if eval_params.is_autoregressive:
         outputs = apply_fn(
-            params,
-            next(rng_seq),
-            batch['input'],
-            jnp.empty_like(batch['output']),
-            sample=True)
+          params,
+          next(rng_seq),
+          batch['input'],
+          jnp.empty_like(batch['output']),
+          sample=True)
       else:
         outputs = apply_fn(params, next(rng_seq), batch['input'])
-      ##Compare model predictions to the true outputs.
-      ##Compute accuracy for this sub-batch and store it.
-      sub_accuracies.append(
-          float(np.mean(eval_params.accuracy_fn(outputs, batch['output']))))
+
+      # Compute accuracy
+      predictions = jnp.argmax(outputs, axis=-1)
+      targets = jnp.argmax(batch['output'], axis=-1)
+      correct = predictions == targets
+      accuracy = float(jnp.mean(correct))
+      sub_accuracies.append(accuracy)
+
+      # # Log wrong predictions
+      # for i, is_correct in enumerate(correct):
+      #     pred_class = int(predictions[i])
+      #     true_class = int(targets[i])
+      #     input_seq = jnp.argmax(batch['input'][i], axis=-1)  # back to 0/1 sequence
+      #     bracket_seq = ''.join('(' if x == 0 else ')' for x in input_seq.tolist())
+      #     print(f"❌ Wrong: {bracket_seq} → predicted: {pred_class}, true: {true_class}")
+
     log_data = {
         'length': length,
         'accuracy': np.mean(sub_accuracies),
