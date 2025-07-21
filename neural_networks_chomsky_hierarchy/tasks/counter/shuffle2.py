@@ -80,10 +80,10 @@ class Shuffle2(task.GeneralizationTask):
             i_par = i_sq = 0
             for pos in range(length):
                 if pos in idx_set:
-                    merged.append(int(par[i_par]));
+                    merged.append(int(par[i_par]))
                     i_par += 1
                 else:
-                    merged.append(int(sq[i_sq]));
+                    merged.append(int(sq[i_sq]))
                     i_sq += 1
             key = tuple(merged)
             if key not in seen_pos:
@@ -91,22 +91,36 @@ class Shuffle2(task.GeneralizationTask):
                 pos_list.append(jnp.array(merged, dtype=jnp.int32))
             attempts += 1
 
-        # --- Generate negative examples ---
-        seen_all = set(seen_pos)
-        neg_list = []
-        attempts = 0
-        while len(neg_list) < num_neg and attempts < num_neg * 10:
-            seq = [random.choice([0, 1, 2, 3]) for _ in range(length)]
-            arr = jnp.array(seq, dtype=jnp.int32)
-            key = tuple(seq)
-            if key not in seen_all and not (
-                    _is_valid_dyck_pair(arr, 0, 1) and _is_valid_dyck_pair(arr, 2, 3)
-            ):
-                seen_all.add(key)
-                neg_list.append(arr)
-            attempts += 1
+        # --- Generate hard-negative examples ---
+        hard_neg_list = []
+        for arr in pos_list:
+            # pick exactly one of the two bracket-types to break
+            bad = random.randrange(2)
+            o_sym, c_sym = (0,1) if bad == 0 else (2,3)
+            seq = list(arr.tolist())
+            idxs = [i for i, x in enumerate(seq) if x in (o_sym, c_sym)]
+            if not idxs:
+                continue
+            # flip one bracket in that projection
+            i = random.choice(idxs)
+            seq[i] = o_sym if seq[i] == c_sym else c_sym
+            hard_neg_list.append(jnp.array(seq, dtype=jnp.int32))
 
-        # Stack, label, shuffle, dedupe
+        # filter to ensure exactly one projection fails
+        seen_hard = set()
+        hard_final = []
+        for seq in hard_neg_list:
+            t = tuple(seq.tolist())
+            if t not in seen_hard and len(hard_final) < num_neg:
+                seen_hard.add(t)
+                valid_count = (_is_valid_dyck_pair(seq, 0, 1)
+                               + _is_valid_dyck_pair(seq, 2, 3))
+                if valid_count == 1:  # one of the two is still valid, so exactly one fails
+                    hard_final.append(seq)
+
+        neg_list = hard_final
+
+        # Stack, label, shuffle
         pos = jnp.stack(pos_list) if pos_list else jnp.empty((0, length), jnp.int32)
         neg = jnp.stack(neg_list) if neg_list else jnp.empty((0, length), jnp.int32)
         strings = jnp.vstack([pos, neg])
@@ -118,9 +132,13 @@ class Shuffle2(task.GeneralizationTask):
         perm = jrandom.permutation(rng_perm, strings.shape[0])
         strings, labels = strings[perm], labels[perm]
 
+        """SOME EXAMPLES:[()(]()[][]) -> in
+        ][)([[]([))) -> out
+        ]][]]])([)[] -> out
+        ([[)([)(]]]) -> in"""
         # Human-readable printout: sequence form and membership
-        seqs = strings.tolist()
-        labs = labels.tolist()
+        # seqs = strings.tolist()
+        # labs = labels.tolist()
         # print("Batch samples:")
         # for seq, lab in zip(seqs, labs):
         #     # map symbols back to brackets
@@ -150,4 +168,5 @@ class Shuffle2(task.GeneralizationTask):
     @property
     def output_size(self) -> int:
         return 2
+
 

@@ -68,36 +68,51 @@ class Dyck1(task.GeneralizationTask):
                 balanced_list.append(arr)
             attempts += 1
 
-        # if len(balanced_list) < num_balanced:
-        #     print(f"Warning: only generated {len(balanced_list)} unique balanced sequences")
-
         if not balanced_list:
             return {"input": jnp.empty((0, length, 2)), "output": jnp.empty((0, 2))}
 
         balanced = jnp.stack(balanced_list)
 
-        seen_all = set(tuple(seq.tolist()) for seq in balanced_list)
-        unbalanced_seqs = []
-        max_iters = num_unbalanced * 10
-        iters = 0
-        while len(unbalanced_seqs) < num_unbalanced and iters < max_iters:
+        # --- Hard negatives: flip exactly one bracket in a balanced sequence ---
+        hard_neg_list = []
+        for arr in balanced_list:
+            seq = list(arr.tolist())
+            # pick a random position and flip it
+            i = random.randrange(length)
+            seq[i] = 0 if seq[i] == 1 else 1
+            neg_arr = jnp.array(seq, dtype=jnp.int32)
+            if not _is_valid_dyck(neg_arr):
+                hard_neg_list.append(neg_arr)
+
+        # pick up to num_unbalanced of these hard negatives (deduped)
+        seen_hard = set()
+        hard_final = []
+        for arr in hard_neg_list:
+            key = tuple(arr.tolist())
+            if key not in seen_hard and len(hard_final) < num_unbalanced:
+                seen_hard.add(key)
+                hard_final.append(arr)
+
+        # if we still need more negatives, fall back to random sampling
+        seen_all = set(seen_balanced)
+        neg_list = hard_final.copy()
+        attempts = 0
+        while len(neg_list) < num_unbalanced and attempts < num_unbalanced * 10:
             py_seq = [random.choice([0, 1]) for _ in range(length)]
             arr = jnp.array(py_seq, dtype=jnp.int32)
             key = tuple(py_seq)
-            if not _is_valid_dyck(arr) and key not in seen_all:
+            if key not in seen_all and not _is_valid_dyck(arr):
                 seen_all.add(key)
-                unbalanced_seqs.append(arr)
-            iters += 1
+                neg_list.append(arr)
+            attempts += 1
 
-        if unbalanced_seqs:
-            unbalanced = jnp.stack(unbalanced_seqs)
-        else:
-            unbalanced = jnp.empty((0, length), dtype=jnp.int32)
-
-        strings = jnp.vstack([balanced, unbalanced])
+        # Stack, label, shuffle
+        pos = jnp.stack(balanced_list) if balanced_list else jnp.empty((0, length), jnp.int32)
+        neg = jnp.stack(neg_list) if neg_list else jnp.empty((0, length), jnp.int32)
+        strings = jnp.vstack([pos, neg])
         labels = jnp.concatenate([
-            jnp.ones(len(balanced_list), dtype=jnp.int32),
-            jnp.zeros(len(unbalanced_seqs), dtype=jnp.int32)
+            jnp.ones(pos.shape[0], dtype=jnp.int32),
+            jnp.zeros(neg.shape[0], dtype=jnp.int32)
         ])
         perm = jrandom.permutation(rng_perm, strings.shape[0])
         strings, labels = strings[perm], labels[perm]
@@ -116,9 +131,15 @@ class Dyck1(task.GeneralizationTask):
 
         one_hot_strings = jnn.one_hot(jnp.array(filtered_strings), num_classes=2)
         labels_onehot = jnn.one_hot(jnp.array(filtered_labels), num_classes=2)
+
+        """SOME EXAMPLES: ())(())) -> unbalanced
+        )))()((( -> unbalanced
+        (()))(())())()(((()))) -> unbalanced
+        ()()(()) -> balanced
+        ()(()((( -> unbalanced        """
         # Human-readable printout: bracket form and membership
-        seqs = strings.tolist()
-        labs = labels.tolist()
+        # seqs = strings.tolist()
+        # labs = labels.tolist()
         # print("Batch samples:")
         # for seq, lab in zip(seqs, labs):
         #     brackets = ''.join('(' if x == 0 else ')' for x in seq)
@@ -134,3 +155,4 @@ class Dyck1(task.GeneralizationTask):
     @property
     def output_size(self) -> int:
         return 2
+
