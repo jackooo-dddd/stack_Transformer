@@ -40,6 +40,7 @@ from neural_networks_chomsky_hierarchy.tasks.regular import even_pairs
 from neural_networks_chomsky_hierarchy.tasks.regular import modular_arithmetic
 from neural_networks_chomsky_hierarchy.tasks.regular import parity_check
 from neural_networks_chomsky_hierarchy.tasks.counter import dyck
+from neural_networks_chomsky_hierarchy.tasks.counter import shuffle2
 from neural_networks_chomsky_hierarchy.training import curriculum as curriculum_lib
 
 MODEL_BUILDERS = {
@@ -114,6 +115,8 @@ TASK_BUILDERS = {
         bucket_sort.BucketSort,
     'dyck':
         dyck.Dyck1,
+    'shuffle2':
+        shuffle2.Shuffle2,
 }
 
 TASK_LEVELS = {

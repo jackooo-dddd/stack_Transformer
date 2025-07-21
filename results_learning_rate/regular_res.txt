@@ -1,160 +1,9 @@
 =================================================================
 =========== TASK 1 of 4 : modular_arithmetic ==================
 =================================================================
-All variants finished for task=modular_arithmetic at 2025-07-19 22:10:26
+All variants finished for task=modular_arithmetic at 2025-07-20 10:33:52
 ------ Combined STDOUT Logs for modular_arithmetic ------
-1) Start STACK RNN at 2025-07-19 18:59:39
-Best learning rate: 0.0005
-Best accuracy: 1.0
-{'length': 4, 'accuracy': 1.0}
-{'length': 8, 'accuracy': 1.0}
-{'length': 12, 'accuracy': 1.0}
-{'length': 16, 'accuracy': 1.0}
-{'length': 20, 'accuracy': 1.0}
-{'length': 24, 'accuracy': 1.0}
-{'length': 28, 'accuracy': 1.0}
-{'length': 32, 'accuracy': 1.0}
-{'length': 36, 'accuracy': 1.0}
-{'length': 40, 'accuracy': 1.0}
-{'length': 44, 'accuracy': 1.0}
-{'length': 48, 'accuracy': 1.0}
-{'length': 52, 'accuracy': 1.0}
-{'length': 56, 'accuracy': 1.0}
-{'length': 60, 'accuracy': 1.0}
-{'length': 64, 'accuracy': 1.0}
-{'length': 68, 'accuracy': 1.0}
-{'length': 72, 'accuracy': 1.0}
-{'length': 76, 'accuracy': 1.0}
-{'length': 80, 'accuracy': 1.0}
-{'length': 84, 'accuracy': 1.0}
-{'length': 88, 'accuracy': 1.0}
-{'length': 92, 'accuracy': 1.0}
-{'length': 96, 'accuracy': 1.0}
-{'length': 100, 'accuracy': 1.0}
-Finish STACK RNN at 2025-07-19 20:47:45
-2) Start TRANSFORMER (no PE) at 2025-07-19 18:59:39
-Best learning rate: 0.0001
-Best accuracy: 0.2346875
-{'length': 4, 'accuracy': 0.841796875}
-{'length': 8, 'accuracy': 0.388671875}
-{'length': 12, 'accuracy': 0.234375}
-{'length': 16, 'accuracy': 0.193359375}
-{'length': 20, 'accuracy': 0.205078125}
-{'length': 24, 'accuracy': 0.208984375}
-{'length': 28, 'accuracy': 0.205078125}
-{'length': 32, 'accuracy': 0.173828125}
-{'length': 36, 'accuracy': 0.189453125}
-{'length': 40, 'accuracy': 0.169921875}
-{'length': 44, 'accuracy': 0.19921875}
-{'length': 48, 'accuracy': 0.203125}
-{'length': 52, 'accuracy': 0.201171875}
-{'length': 56, 'accuracy': 0.181640625}
-{'length': 60, 'accuracy': 0.216796875}
-{'length': 64, 'accuracy': 0.21875}
-{'length': 68, 'accuracy': 0.19921875}
-{'length': 72, 'accuracy': 0.197265625}
-{'length': 76, 'accuracy': 0.189453125}
-{'length': 80, 'accuracy': 0.240234375}
-{'length': 84, 'accuracy': 0.20703125}
-{'length': 88, 'accuracy': 0.21875}
-{'length': 92, 'accuracy': 0.1875}
-{'length': 96, 'accuracy': 0.1953125}
-{'length': 100, 'accuracy': 0.201171875}
-Finish TRANSFORMER (no PE) at 2025-07-19 20:51:11
-3) Start TRANSFORMER (ALIBI) at 2025-07-19 18:59:39
-Best learning rate: 0.0001
-Best accuracy: 0.32078125
-{'length': 4, 'accuracy': 1.0}
-{'length': 8, 'accuracy': 0.947265625}
-{'length': 12, 'accuracy': 0.8125}
-{'length': 16, 'accuracy': 0.609375}
-{'length': 20, 'accuracy': 0.427734375}
-{'length': 24, 'accuracy': 0.31640625}
-{'length': 28, 'accuracy': 0.267578125}
-{'length': 32, 'accuracy': 0.208984375}
-{'length': 36, 'accuracy': 0.236328125}
-{'length': 40, 'accuracy': 0.1875}
-{'length': 44, 'accuracy': 0.197265625}
-{'length': 48, 'accuracy': 0.212890625}
-{'length': 52, 'accuracy': 0.16796875}
-{'length': 56, 'accuracy': 0.177734375}
-{'length': 60, 'accuracy': 0.23046875}
-{'length': 64, 'accuracy': 0.212890625}
-{'length': 68, 'accuracy': 0.21484375}
-{'length': 72, 'accuracy': 0.193359375}
-{'length': 76, 'accuracy': 0.193359375}
-{'length': 80, 'accuracy': 0.212890625}
-{'length': 84, 'accuracy': 0.212890625}
-{'length': 88, 'accuracy': 0.18359375}
-{'length': 92, 'accuracy': 0.193359375}
-{'length': 96, 'accuracy': 0.177734375}
-{'length': 100, 'accuracy': 0.224609375}
-Finish TRANSFORMER (ALIBI) at 2025-07-19 20:48:08
-4) Start STACK-AUG (no PE) at 2025-07-19 18:59:39
-Best learning rate: 0.0001
-Best accuracy: 0.394375
-{'length': 4, 'accuracy': 1.0}
-{'length': 8, 'accuracy': 0.978515625}
-{'length': 12, 'accuracy': 0.91796875}
-{'length': 16, 'accuracy': 0.859375}
-{'length': 20, 'accuracy': 0.720703125}
-{'length': 24, 'accuracy': 0.63671875}
-{'length': 28, 'accuracy': 0.529296875}
-{'length': 32, 'accuracy': 0.458984375}
-{'length': 36, 'accuracy': 0.392578125}
-{'length': 40, 'accuracy': 0.306640625}
-{'length': 44, 'accuracy': 0.294921875}
-{'length': 48, 'accuracy': 0.212890625}
-{'length': 52, 'accuracy': 0.2265625}
-{'length': 56, 'accuracy': 0.201171875}
-{'length': 60, 'accuracy': 0.1953125}
-{'length': 64, 'accuracy': 0.189453125}
-{'length': 68, 'accuracy': 0.1953125}
-{'length': 72, 'accuracy': 0.16796875}
-{'length': 76, 'accuracy': 0.197265625}
-{'length': 80, 'accuracy': 0.203125}
-{'length': 84, 'accuracy': 0.181640625}
-{'length': 88, 'accuracy': 0.1953125}
-{'length': 92, 'accuracy': 0.201171875}
-{'length': 96, 'accuracy': 0.1796875}
-{'length': 100, 'accuracy': 0.216796875}
-Finish STACK-AUG (no PE) at 2025-07-19 22:08:00
-5) Start STACK-AUG (ALIBI) at 2025-07-19 18:59:39
-Best learning rate: 0.0003
-Best accuracy: 0.3909375
-{'length': 4, 'accuracy': 0.99609375}
-{'length': 8, 'accuracy': 0.986328125}
-{'length': 12, 'accuracy': 0.93359375}
-{'length': 16, 'accuracy': 0.86328125}
-{'length': 20, 'accuracy': 0.744140625}
-{'length': 24, 'accuracy': 0.68359375}
-{'length': 28, 'accuracy': 0.513671875}
-{'length': 32, 'accuracy': 0.419921875}
-{'length': 36, 'accuracy': 0.359375}
-{'length': 40, 'accuracy': 0.265625}
-{'length': 44, 'accuracy': 0.263671875}
-{'length': 48, 'accuracy': 0.201171875}
-{'length': 52, 'accuracy': 0.220703125}
-{'length': 56, 'accuracy': 0.189453125}
-{'length': 60, 'accuracy': 0.197265625}
-{'length': 64, 'accuracy': 0.193359375}
-{'length': 68, 'accuracy': 0.189453125}
-{'length': 72, 'accuracy': 0.171875}
-{'length': 76, 'accuracy': 0.19921875}
-{'length': 80, 'accuracy': 0.205078125}
-{'length': 84, 'accuracy': 0.18359375}
-{'length': 88, 'accuracy': 0.193359375}
-{'length': 92, 'accuracy': 0.201171875}
-{'length': 96, 'accuracy': 0.181640625}
-{'length': 100, 'accuracy': 0.216796875}
-Finish STACK-AUG (ALIBI) at 2025-07-19 22:10:26
-
-=================================================================
-=========== TASK 2 of 4 : even_pairs ==================
-=================================================================
-All variants finished for task=even_pairs at 2025-07-20 01:48:53
------- Combined STDOUT Logs for even_pairs ------
-1) Start STACK RNN at 2025-07-19 22:10:26
+1) Start STACK RNN at 2025-07-20 07:24:33
 Best learning rate: 0.001
 Best accuracy: 1.0
 {'length': 4, 'accuracy': 1.0}
@@ -182,273 +31,574 @@ Best accuracy: 1.0
 {'length': 92, 'accuracy': 1.0}
 {'length': 96, 'accuracy': 1.0}
 {'length': 100, 'accuracy': 1.0}
-Finish STACK RNN at 2025-07-19 23:31:52
-2) Start TRANSFORMER (no PE) at 2025-07-19 22:10:26
-Best learning rate: 0.0003
-Best accuracy: 0.525859375
-{'length': 4, 'accuracy': 0.638671875}
-{'length': 8, 'accuracy': 0.5390625}
-{'length': 12, 'accuracy': 0.5625}
-{'length': 16, 'accuracy': 0.521484375}
-{'length': 20, 'accuracy': 0.533203125}
-{'length': 24, 'accuracy': 0.576171875}
-{'length': 28, 'accuracy': 0.537109375}
-{'length': 32, 'accuracy': 0.49609375}
-{'length': 36, 'accuracy': 0.5546875}
-{'length': 40, 'accuracy': 0.498046875}
-{'length': 44, 'accuracy': 0.5078125}
-{'length': 48, 'accuracy': 0.515625}
-{'length': 52, 'accuracy': 0.546875}
-{'length': 56, 'accuracy': 0.517578125}
-{'length': 60, 'accuracy': 0.513671875}
-{'length': 64, 'accuracy': 0.501953125}
-{'length': 68, 'accuracy': 0.5}
-{'length': 72, 'accuracy': 0.482421875}
-{'length': 76, 'accuracy': 0.513671875}
-{'length': 80, 'accuracy': 0.5078125}
-{'length': 84, 'accuracy': 0.5}
-{'length': 88, 'accuracy': 0.48828125}
-{'length': 92, 'accuracy': 0.546875}
-{'length': 96, 'accuracy': 0.515625}
-{'length': 100, 'accuracy': 0.53125}
-Finish TRANSFORMER (no PE) at 2025-07-20 00:06:43
-3) Start TRANSFORMER (ALIBI) at 2025-07-19 22:10:26
+Finish STACK RNN at 2025-07-20 09:11:59
+2) Start TRANSFORMER (no PE) at 2025-07-20 07:24:33
 Best learning rate: 0.0001
-Best accuracy: 0.9540625
+Best accuracy: 0.236640625
+{'length': 4, 'accuracy': 0.849609375}
+{'length': 8, 'accuracy': 0.376953125}
+{'length': 12, 'accuracy': 0.234375}
+{'length': 16, 'accuracy': 0.189453125}
+{'length': 20, 'accuracy': 0.208984375}
+{'length': 24, 'accuracy': 0.201171875}
+{'length': 28, 'accuracy': 0.197265625}
+{'length': 32, 'accuracy': 0.181640625}
+{'length': 36, 'accuracy': 0.20703125}
+{'length': 40, 'accuracy': 0.1796875}
+{'length': 44, 'accuracy': 0.1953125}
+{'length': 48, 'accuracy': 0.197265625}
+{'length': 52, 'accuracy': 0.212890625}
+{'length': 56, 'accuracy': 0.185546875}
+{'length': 60, 'accuracy': 0.228515625}
+{'length': 64, 'accuracy': 0.21875}
+{'length': 68, 'accuracy': 0.185546875}
+{'length': 72, 'accuracy': 0.197265625}
+{'length': 76, 'accuracy': 0.2109375}
+{'length': 80, 'accuracy': 0.224609375}
+{'length': 84, 'accuracy': 0.212890625}
+{'length': 88, 'accuracy': 0.220703125}
+{'length': 92, 'accuracy': 0.1875}
+{'length': 96, 'accuracy': 0.205078125}
+{'length': 100, 'accuracy': 0.20703125}
+Finish TRANSFORMER (no PE) at 2025-07-20 09:12:41
+3) Start TRANSFORMER (ALIBI) at 2025-07-20 07:24:33
+Best learning rate: 0.0001
+Best accuracy: 0.346015625
+{'length': 4, 'accuracy': 1.0}
+{'length': 8, 'accuracy': 0.958984375}
+{'length': 12, 'accuracy': 0.861328125}
+{'length': 16, 'accuracy': 0.701171875}
+{'length': 20, 'accuracy': 0.53515625}
+{'length': 24, 'accuracy': 0.4140625}
+{'length': 28, 'accuracy': 0.333984375}
+{'length': 32, 'accuracy': 0.287109375}
+{'length': 36, 'accuracy': 0.236328125}
+{'length': 40, 'accuracy': 0.2421875}
+{'length': 44, 'accuracy': 0.232421875}
+{'length': 48, 'accuracy': 0.18359375}
+{'length': 52, 'accuracy': 0.19921875}
+{'length': 56, 'accuracy': 0.212890625}
+{'length': 60, 'accuracy': 0.220703125}
+{'length': 64, 'accuracy': 0.208984375}
+{'length': 68, 'accuracy': 0.20703125}
+{'length': 72, 'accuracy': 0.19921875}
+{'length': 76, 'accuracy': 0.1875}
+{'length': 80, 'accuracy': 0.181640625}
+{'length': 84, 'accuracy': 0.205078125}
+{'length': 88, 'accuracy': 0.208984375}
+{'length': 92, 'accuracy': 0.220703125}
+{'length': 96, 'accuracy': 0.2109375}
+{'length': 100, 'accuracy': 0.201171875}
+Finish TRANSFORMER (ALIBI) at 2025-07-20 09:16:32
+4) Start STACK-AUG (no PE) at 2025-07-20 07:24:33
+Best learning rate: 0.0001
+Best accuracy: 0.4125
+{'length': 4, 'accuracy': 1.0}
+{'length': 8, 'accuracy': 0.982421875}
+{'length': 12, 'accuracy': 0.916015625}
+{'length': 16, 'accuracy': 0.859375}
+{'length': 20, 'accuracy': 0.740234375}
+{'length': 24, 'accuracy': 0.65625}
+{'length': 28, 'accuracy': 0.556640625}
+{'length': 32, 'accuracy': 0.5078125}
+{'length': 36, 'accuracy': 0.416015625}
+{'length': 40, 'accuracy': 0.369140625}
+{'length': 44, 'accuracy': 0.3203125}
+{'length': 48, 'accuracy': 0.228515625}
+{'length': 52, 'accuracy': 0.208984375}
+{'length': 56, 'accuracy': 0.248046875}
+{'length': 60, 'accuracy': 0.1953125}
+{'length': 64, 'accuracy': 0.228515625}
+{'length': 68, 'accuracy': 0.169921875}
+{'length': 72, 'accuracy': 0.22265625}
+{'length': 76, 'accuracy': 0.22265625}
+{'length': 80, 'accuracy': 0.205078125}
+{'length': 84, 'accuracy': 0.1953125}
+{'length': 88, 'accuracy': 0.234375}
+{'length': 92, 'accuracy': 0.234375}
+{'length': 96, 'accuracy': 0.189453125}
+{'length': 100, 'accuracy': 0.205078125}
+Finish STACK-AUG (no PE) at 2025-07-20 10:33:52
+5) Start STACK-AUG (ALIBI) at 2025-07-20 07:24:33
+Best learning rate: 0.0001
+Best accuracy: 0.349375
+{'length': 4, 'accuracy': 1.0}
+{'length': 8, 'accuracy': 0.955078125}
+{'length': 12, 'accuracy': 0.875}
+{'length': 16, 'accuracy': 0.759765625}
+{'length': 20, 'accuracy': 0.603515625}
+{'length': 24, 'accuracy': 0.47265625}
+{'length': 28, 'accuracy': 0.328125}
+{'length': 32, 'accuracy': 0.349609375}
+{'length': 36, 'accuracy': 0.287109375}
+{'length': 40, 'accuracy': 0.19921875}
+{'length': 44, 'accuracy': 0.220703125}
+{'length': 48, 'accuracy': 0.18359375}
+{'length': 52, 'accuracy': 0.1953125}
+{'length': 56, 'accuracy': 0.185546875}
+{'length': 60, 'accuracy': 0.201171875}
+{'length': 64, 'accuracy': 0.177734375}
+{'length': 68, 'accuracy': 0.19140625}
+{'length': 72, 'accuracy': 0.171875}
+{'length': 76, 'accuracy': 0.205078125}
+{'length': 80, 'accuracy': 0.19921875}
+{'length': 84, 'accuracy': 0.1875}
+{'length': 88, 'accuracy': 0.19140625}
+{'length': 92, 'accuracy': 0.201171875}
+{'length': 96, 'accuracy': 0.17578125}
+{'length': 100, 'accuracy': 0.216796875}
+Finish STACK-AUG (ALIBI) at 2025-07-20 10:32:08
+
+=================================================================
+=========== TASK 2 of 4 : even_pairs ==================
+=================================================================
+All variants finished for task=even_pairs at 2025-07-20 14:17:12
+------ Combined STDOUT Logs for even_pairs ------
+1) Start STACK RNN at 2025-07-20 10:33:53
+Best learning rate: 0.001
+Best accuracy: 1.0
 {'length': 4, 'accuracy': 1.0}
 {'length': 8, 'accuracy': 1.0}
+{'length': 12, 'accuracy': 1.0}
+{'length': 16, 'accuracy': 1.0}
+{'length': 20, 'accuracy': 1.0}
+{'length': 24, 'accuracy': 1.0}
+{'length': 28, 'accuracy': 1.0}
+{'length': 32, 'accuracy': 1.0}
+{'length': 36, 'accuracy': 1.0}
+{'length': 40, 'accuracy': 1.0}
+{'length': 44, 'accuracy': 1.0}
+{'length': 48, 'accuracy': 1.0}
+{'length': 52, 'accuracy': 1.0}
+{'length': 56, 'accuracy': 1.0}
+{'length': 60, 'accuracy': 1.0}
+{'length': 64, 'accuracy': 1.0}
+{'length': 68, 'accuracy': 1.0}
+{'length': 72, 'accuracy': 1.0}
+{'length': 76, 'accuracy': 1.0}
+{'length': 80, 'accuracy': 1.0}
+{'length': 84, 'accuracy': 1.0}
+{'length': 88, 'accuracy': 1.0}
+{'length': 92, 'accuracy': 1.0}
+{'length': 96, 'accuracy': 1.0}
+{'length': 100, 'accuracy': 1.0}
+Finish STACK RNN at 2025-07-20 11:57:09
+2) Start TRANSFORMER (no PE) at 2025-07-20 10:33:53
+Best learning rate: 5e-05
+Best accuracy: 0.526015625
+{'length': 4, 'accuracy': 0.63671875}
+{'length': 8, 'accuracy': 0.533203125}
+{'length': 12, 'accuracy': 0.568359375}
+{'length': 16, 'accuracy': 0.53125}
+{'length': 20, 'accuracy': 0.533203125}
+{'length': 24, 'accuracy': 0.546875}
+{'length': 28, 'accuracy': 0.544921875}
+{'length': 32, 'accuracy': 0.49609375}
+{'length': 36, 'accuracy': 0.52734375}
+{'length': 40, 'accuracy': 0.474609375}
+{'length': 44, 'accuracy': 0.5078125}
+{'length': 48, 'accuracy': 0.5390625}
+{'length': 52, 'accuracy': 0.560546875}
+{'length': 56, 'accuracy': 0.498046875}
+{'length': 60, 'accuracy': 0.521484375}
+{'length': 64, 'accuracy': 0.5234375}
+{'length': 68, 'accuracy': 0.53515625}
+{'length': 72, 'accuracy': 0.47265625}
+{'length': 76, 'accuracy': 0.498046875}
+{'length': 80, 'accuracy': 0.533203125}
+{'length': 84, 'accuracy': 0.515625}
+{'length': 88, 'accuracy': 0.494140625}
+{'length': 92, 'accuracy': 0.53515625}
+{'length': 96, 'accuracy': 0.517578125}
+{'length': 100, 'accuracy': 0.505859375}
+Finish TRANSFORMER (no PE) at 2025-07-20 12:29:04
+3) Start TRANSFORMER (ALIBI) at 2025-07-20 10:33:53
+Best learning rate: 0.0001
+Best accuracy: 0.958515625
+{'length': 4, 'accuracy': 1.0}
+{'length': 8, 'accuracy': 1.0}
+{'length': 12, 'accuracy': 1.0}
+{'length': 16, 'accuracy': 1.0}
+{'length': 20, 'accuracy': 1.0}
+{'length': 24, 'accuracy': 1.0}
+{'length': 28, 'accuracy': 1.0}
+{'length': 32, 'accuracy': 0.998046875}
+{'length': 36, 'accuracy': 0.998046875}
+{'length': 40, 'accuracy': 0.99609375}
+{'length': 44, 'accuracy': 0.9921875}
+{'length': 48, 'accuracy': 0.98828125}
+{'length': 52, 'accuracy': 0.982421875}
+{'length': 56, 'accuracy': 0.98046875}
+{'length': 60, 'accuracy': 0.9765625}
+{'length': 64, 'accuracy': 0.951171875}
+{'length': 68, 'accuracy': 0.939453125}
+{'length': 72, 'accuracy': 0.923828125}
+{'length': 76, 'accuracy': 0.93359375}
+{'length': 80, 'accuracy': 0.8984375}
+{'length': 84, 'accuracy': 0.92578125}
+{'length': 88, 'accuracy': 0.8984375}
+{'length': 92, 'accuracy': 0.873046875}
+{'length': 96, 'accuracy': 0.85546875}
+{'length': 100, 'accuracy': 0.8515625}
+Finish TRANSFORMER (ALIBI) at 2025-07-20 12:30:13
+4) Start STACK-AUG (no PE) at 2025-07-20 10:33:53
+Best learning rate: 0.0005
+Best accuracy: 1.0
+{'length': 4, 'accuracy': 1.0}
+{'length': 8, 'accuracy': 1.0}
+{'length': 12, 'accuracy': 1.0}
+{'length': 16, 'accuracy': 1.0}
+{'length': 20, 'accuracy': 1.0}
+{'length': 24, 'accuracy': 1.0}
+{'length': 28, 'accuracy': 1.0}
+{'length': 32, 'accuracy': 1.0}
+{'length': 36, 'accuracy': 1.0}
+{'length': 40, 'accuracy': 1.0}
+{'length': 44, 'accuracy': 1.0}
+{'length': 48, 'accuracy': 1.0}
+{'length': 52, 'accuracy': 1.0}
+{'length': 56, 'accuracy': 1.0}
+{'length': 60, 'accuracy': 1.0}
+{'length': 64, 'accuracy': 1.0}
+{'length': 68, 'accuracy': 1.0}
+{'length': 72, 'accuracy': 1.0}
+{'length': 76, 'accuracy': 1.0}
+{'length': 80, 'accuracy': 1.0}
+{'length': 84, 'accuracy': 1.0}
+{'length': 88, 'accuracy': 1.0}
+{'length': 92, 'accuracy': 1.0}
+{'length': 96, 'accuracy': 1.0}
+{'length': 100, 'accuracy': 1.0}
+Finish STACK-AUG (no PE) at 2025-07-20 14:16:52
+5) Start STACK-AUG (ALIBI) at 2025-07-20 10:33:53
+Best learning rate: 0.0005
+Best accuracy: 1.0
+{'length': 4, 'accuracy': 1.0}
+{'length': 8, 'accuracy': 1.0}
+{'length': 12, 'accuracy': 1.0}
+{'length': 16, 'accuracy': 1.0}
+{'length': 20, 'accuracy': 1.0}
+{'length': 24, 'accuracy': 1.0}
+{'length': 28, 'accuracy': 1.0}
+{'length': 32, 'accuracy': 1.0}
+{'length': 36, 'accuracy': 1.0}
+{'length': 40, 'accuracy': 1.0}
+{'length': 44, 'accuracy': 1.0}
+{'length': 48, 'accuracy': 1.0}
+{'length': 52, 'accuracy': 1.0}
+{'length': 56, 'accuracy': 1.0}
+{'length': 60, 'accuracy': 1.0}
+{'length': 64, 'accuracy': 1.0}
+{'length': 68, 'accuracy': 1.0}
+{'length': 72, 'accuracy': 1.0}
+{'length': 76, 'accuracy': 1.0}
+{'length': 80, 'accuracy': 1.0}
+{'length': 84, 'accuracy': 1.0}
+{'length': 88, 'accuracy': 1.0}
+{'length': 92, 'accuracy': 1.0}
+{'length': 96, 'accuracy': 1.0}
+{'length': 100, 'accuracy': 1.0}
+Finish STACK-AUG (ALIBI) at 2025-07-20 14:17:12
+
+=================================================================
+=========== TASK 3 of 4 : parity_check ==================
+=================================================================
+All variants finished for task=parity_check at 2025-07-20 17:59:54
+------ Combined STDOUT Logs for parity_check ------
+1) Start STACK RNN at 2025-07-20 14:17:13
+Best learning rate: 0.001
+Best accuracy: 1.0
+{'length': 4, 'accuracy': 1.0}
+{'length': 8, 'accuracy': 1.0}
+{'length': 12, 'accuracy': 1.0}
+{'length': 16, 'accuracy': 1.0}
+{'length': 20, 'accuracy': 1.0}
+{'length': 24, 'accuracy': 1.0}
+{'length': 28, 'accuracy': 1.0}
+{'length': 32, 'accuracy': 1.0}
+{'length': 36, 'accuracy': 1.0}
+{'length': 40, 'accuracy': 1.0}
+{'length': 44, 'accuracy': 1.0}
+{'length': 48, 'accuracy': 1.0}
+{'length': 52, 'accuracy': 1.0}
+{'length': 56, 'accuracy': 1.0}
+{'length': 60, 'accuracy': 1.0}
+{'length': 64, 'accuracy': 1.0}
+{'length': 68, 'accuracy': 1.0}
+{'length': 72, 'accuracy': 1.0}
+{'length': 76, 'accuracy': 1.0}
+{'length': 80, 'accuracy': 1.0}
+{'length': 84, 'accuracy': 1.0}
+{'length': 88, 'accuracy': 1.0}
+{'length': 92, 'accuracy': 1.0}
+{'length': 96, 'accuracy': 1.0}
+{'length': 100, 'accuracy': 1.0}
+Finish STACK RNN at 2025-07-20 15:42:27
+2) Start TRANSFORMER (no PE) at 2025-07-20 14:17:13
+Best learning rate: 5e-05
+Best accuracy: 0.704609375
+{'length': 4, 'accuracy': 1.0}
+{'length': 8, 'accuracy': 1.0}
+{'length': 12, 'accuracy': 1.0}
+{'length': 16, 'accuracy': 0.994140625}
+{'length': 20, 'accuracy': 0.98828125}
+{'length': 24, 'accuracy': 0.962890625}
+{'length': 28, 'accuracy': 0.9140625}
+{'length': 32, 'accuracy': 0.896484375}
+{'length': 36, 'accuracy': 0.876953125}
+{'length': 40, 'accuracy': 0.791015625}
+{'length': 44, 'accuracy': 0.744140625}
+{'length': 48, 'accuracy': 0.69140625}
+{'length': 52, 'accuracy': 0.666015625}
+{'length': 56, 'accuracy': 0.59375}
+{'length': 60, 'accuracy': 0.52734375}
+{'length': 64, 'accuracy': 0.525390625}
+{'length': 68, 'accuracy': 0.4609375}
+{'length': 72, 'accuracy': 0.501953125}
+{'length': 76, 'accuracy': 0.537109375}
+{'length': 80, 'accuracy': 0.515625}
+{'length': 84, 'accuracy': 0.51953125}
+{'length': 88, 'accuracy': 0.46875}
+{'length': 92, 'accuracy': 0.490234375}
+{'length': 96, 'accuracy': 0.474609375}
+{'length': 100, 'accuracy': 0.474609375}
+Finish TRANSFORMER (no PE) at 2025-07-20 16:14:03
+3) Start TRANSFORMER (ALIBI) at 2025-07-20 14:17:13
+Best learning rate: 0.0001
+Best accuracy: 0.686640625
+{'length': 4, 'accuracy': 1.0}
+{'length': 8, 'accuracy': 1.0}
+{'length': 12, 'accuracy': 1.0}
+{'length': 16, 'accuracy': 1.0}
+{'length': 20, 'accuracy': 1.0}
+{'length': 24, 'accuracy': 0.986328125}
+{'length': 28, 'accuracy': 0.93359375}
+{'length': 32, 'accuracy': 0.923828125}
+{'length': 36, 'accuracy': 0.896484375}
+{'length': 40, 'accuracy': 0.81640625}
+{'length': 44, 'accuracy': 0.638671875}
+{'length': 48, 'accuracy': 0.490234375}
+{'length': 52, 'accuracy': 0.494140625}
+{'length': 56, 'accuracy': 0.447265625}
+{'length': 60, 'accuracy': 0.505859375}
+{'length': 64, 'accuracy': 0.47265625}
+{'length': 68, 'accuracy': 0.494140625}
+{'length': 72, 'accuracy': 0.501953125}
+{'length': 76, 'accuracy': 0.484375}
+{'length': 80, 'accuracy': 0.5}
+{'length': 84, 'accuracy': 0.515625}
+{'length': 88, 'accuracy': 0.50390625}
+{'length': 92, 'accuracy': 0.51171875}
+{'length': 96, 'accuracy': 0.525390625}
+{'length': 100, 'accuracy': 0.5234375}
+Finish TRANSFORMER (ALIBI) at 2025-07-20 16:12:24
+4) Start STACK-AUG (no PE) at 2025-07-20 14:17:13
+Best learning rate: 5e-05
+Best accuracy: 0.69890625
+{'length': 4, 'accuracy': 1.0}
+{'length': 8, 'accuracy': 0.99609375}
+{'length': 12, 'accuracy': 0.99609375}
+{'length': 16, 'accuracy': 0.990234375}
+{'length': 20, 'accuracy': 0.994140625}
+{'length': 24, 'accuracy': 0.998046875}
+{'length': 28, 'accuracy': 0.994140625}
+{'length': 32, 'accuracy': 0.984375}
+{'length': 36, 'accuracy': 0.935546875}
+{'length': 40, 'accuracy': 0.81640625}
+{'length': 44, 'accuracy': 0.697265625}
+{'length': 48, 'accuracy': 0.595703125}
+{'length': 52, 'accuracy': 0.529296875}
+{'length': 56, 'accuracy': 0.462890625}
+{'length': 60, 'accuracy': 0.48828125}
+{'length': 64, 'accuracy': 0.525390625}
+{'length': 68, 'accuracy': 0.482421875}
+{'length': 72, 'accuracy': 0.513671875}
+{'length': 76, 'accuracy': 0.537109375}
+{'length': 80, 'accuracy': 0.509765625}
+{'length': 84, 'accuracy': 0.517578125}
+{'length': 88, 'accuracy': 0.46875}
+{'length': 92, 'accuracy': 0.490234375}
+{'length': 96, 'accuracy': 0.474609375}
+{'length': 100, 'accuracy': 0.474609375}
+Finish STACK-AUG (no PE) at 2025-07-20 17:59:49
+5) Start STACK-AUG (ALIBI) at 2025-07-20 14:17:13
+Best learning rate: 5e-05
+Best accuracy: 0.636015625
+{'length': 4, 'accuracy': 1.0}
+{'length': 8, 'accuracy': 1.0}
+{'length': 12, 'accuracy': 1.0}
+{'length': 16, 'accuracy': 1.0}
+{'length': 20, 'accuracy': 1.0}
+{'length': 24, 'accuracy': 0.99609375}
+{'length': 28, 'accuracy': 0.970703125}
+{'length': 32, 'accuracy': 0.88671875}
+{'length': 36, 'accuracy': 0.654296875}
+{'length': 40, 'accuracy': 0.375}
+{'length': 44, 'accuracy': 0.216796875}
+{'length': 48, 'accuracy': 0.29296875}
+{'length': 52, 'accuracy': 0.423828125}
+{'length': 56, 'accuracy': 0.54296875}
+{'length': 60, 'accuracy': 0.52734375}
+{'length': 64, 'accuracy': 0.482421875}
+{'length': 68, 'accuracy': 0.525390625}
+{'length': 72, 'accuracy': 0.48046875}
+{'length': 76, 'accuracy': 0.458984375}
+{'length': 80, 'accuracy': 0.4921875}
+{'length': 84, 'accuracy': 0.48046875}
+{'length': 88, 'accuracy': 0.5234375}
+{'length': 92, 'accuracy': 0.513671875}
+{'length': 96, 'accuracy': 0.525390625}
+{'length': 100, 'accuracy': 0.53125}
+Finish STACK-AUG (ALIBI) at 2025-07-20 17:59:54
+
+=================================================================
+=========== TASK 4 of 4 : cycle_navigation ==================
+=================================================================
+All variants finished for task=cycle_navigation at 2025-07-20 21:41:57
+------ Combined STDOUT Logs for cycle_navigation ------
+1) Start STACK RNN at 2025-07-20 17:59:54
+Best learning rate: 0.001
+Best accuracy: 1.0
+{'length': 4, 'accuracy': 1.0}
+{'length': 8, 'accuracy': 1.0}
+{'length': 12, 'accuracy': 1.0}
+{'length': 16, 'accuracy': 1.0}
+{'length': 20, 'accuracy': 1.0}
+{'length': 24, 'accuracy': 1.0}
+{'length': 28, 'accuracy': 1.0}
+{'length': 32, 'accuracy': 1.0}
+{'length': 36, 'accuracy': 1.0}
+{'length': 40, 'accuracy': 1.0}
+{'length': 44, 'accuracy': 1.0}
+{'length': 48, 'accuracy': 1.0}
+{'length': 52, 'accuracy': 1.0}
+{'length': 56, 'accuracy': 1.0}
+{'length': 60, 'accuracy': 1.0}
+{'length': 64, 'accuracy': 1.0}
+{'length': 68, 'accuracy': 1.0}
+{'length': 72, 'accuracy': 1.0}
+{'length': 76, 'accuracy': 1.0}
+{'length': 80, 'accuracy': 1.0}
+{'length': 84, 'accuracy': 1.0}
+{'length': 88, 'accuracy': 1.0}
+{'length': 92, 'accuracy': 1.0}
+{'length': 96, 'accuracy': 1.0}
+{'length': 100, 'accuracy': 1.0}
+Finish STACK RNN at 2025-07-20 19:24:00
+2) Start TRANSFORMER (no PE) at 2025-07-20 17:59:54
+Best learning rate: 0.0005
+Best accuracy: 0.86390625
+{'length': 4, 'accuracy': 1.0}
+{'length': 8, 'accuracy': 1.0}
+{'length': 12, 'accuracy': 1.0}
+{'length': 16, 'accuracy': 1.0}
+{'length': 20, 'accuracy': 1.0}
+{'length': 24, 'accuracy': 0.994140625}
+{'length': 28, 'accuracy': 0.998046875}
+{'length': 32, 'accuracy': 0.998046875}
+{'length': 36, 'accuracy': 0.9921875}
+{'length': 40, 'accuracy': 0.98828125}
+{'length': 44, 'accuracy': 0.9765625}
+{'length': 48, 'accuracy': 0.94921875}
+{'length': 52, 'accuracy': 0.91015625}
+{'length': 56, 'accuracy': 0.900390625}
+{'length': 60, 'accuracy': 0.875}
+{'length': 64, 'accuracy': 0.853515625}
+{'length': 68, 'accuracy': 0.818359375}
+{'length': 72, 'accuracy': 0.763671875}
+{'length': 76, 'accuracy': 0.734375}
+{'length': 80, 'accuracy': 0.736328125}
+{'length': 84, 'accuracy': 0.666015625}
+{'length': 88, 'accuracy': 0.66015625}
+{'length': 92, 'accuracy': 0.619140625}
+{'length': 96, 'accuracy': 0.599609375}
+{'length': 100, 'accuracy': 0.564453125}
+Finish TRANSFORMER (no PE) at 2025-07-20 19:58:13
+3) Start TRANSFORMER (ALIBI) at 2025-07-20 17:59:54
+Best learning rate: 5e-05
+Best accuracy: 0.80171875
+{'length': 4, 'accuracy': 1.0}
+{'length': 8, 'accuracy': 0.998046875}
+{'length': 12, 'accuracy': 1.0}
+{'length': 16, 'accuracy': 1.0}
+{'length': 20, 'accuracy': 1.0}
+{'length': 24, 'accuracy': 1.0}
+{'length': 28, 'accuracy': 1.0}
+{'length': 32, 'accuracy': 0.998046875}
+{'length': 36, 'accuracy': 0.9921875}
+{'length': 40, 'accuracy': 0.9921875}
+{'length': 44, 'accuracy': 0.96875}
+{'length': 48, 'accuracy': 0.9609375}
+{'length': 52, 'accuracy': 0.943359375}
+{'length': 56, 'accuracy': 0.904296875}
+{'length': 60, 'accuracy': 0.88671875}
+{'length': 64, 'accuracy': 0.85546875}
+{'length': 68, 'accuracy': 0.81640625}
+{'length': 72, 'accuracy': 0.701171875}
+{'length': 76, 'accuracy': 0.640625}
+{'length': 80, 'accuracy': 0.56640625}
+{'length': 84, 'accuracy': 0.421875}
+{'length': 88, 'accuracy': 0.41015625}
+{'length': 92, 'accuracy': 0.3515625}
+{'length': 96, 'accuracy': 0.341796875}
+{'length': 100, 'accuracy': 0.29296875}
+Finish TRANSFORMER (ALIBI) at 2025-07-20 19:55:39
+4) Start STACK-AUG (no PE) at 2025-07-20 17:59:54
+Best learning rate: 0.0005
+Best accuracy: 0.7246875
+{'length': 4, 'accuracy': 0.978515625}
+{'length': 8, 'accuracy': 0.998046875}
 {'length': 12, 'accuracy': 1.0}
 {'length': 16, 'accuracy': 1.0}
 {'length': 20, 'accuracy': 1.0}
 {'length': 24, 'accuracy': 0.998046875}
 {'length': 28, 'accuracy': 0.998046875}
-{'length': 32, 'accuracy': 0.998046875}
-{'length': 36, 'accuracy': 0.99609375}
-{'length': 40, 'accuracy': 0.998046875}
-{'length': 44, 'accuracy': 0.990234375}
-{'length': 48, 'accuracy': 0.98828125}
-{'length': 52, 'accuracy': 0.9765625}
-{'length': 56, 'accuracy': 0.984375}
-{'length': 60, 'accuracy': 0.96484375}
-{'length': 64, 'accuracy': 0.9296875}
-{'length': 68, 'accuracy': 0.935546875}
-{'length': 72, 'accuracy': 0.92578125}
-{'length': 76, 'accuracy': 0.919921875}
-{'length': 80, 'accuracy': 0.90625}
-{'length': 84, 'accuracy': 0.900390625}
-{'length': 88, 'accuracy': 0.888671875}
-{'length': 92, 'accuracy': 0.875}
-{'length': 96, 'accuracy': 0.849609375}
-{'length': 100, 'accuracy': 0.828125}
-Finish TRANSFORMER (ALIBI) at 2025-07-20 00:05:44
-4) Start STACK-AUG (no PE) at 2025-07-19 22:10:26
+{'length': 32, 'accuracy': 0.99609375}
+{'length': 36, 'accuracy': 0.98828125}
+{'length': 40, 'accuracy': 0.98828125}
+{'length': 44, 'accuracy': 0.96484375}
+{'length': 48, 'accuracy': 0.955078125}
+{'length': 52, 'accuracy': 0.8984375}
+{'length': 56, 'accuracy': 0.8203125}
+{'length': 60, 'accuracy': 0.763671875}
+{'length': 64, 'accuracy': 0.646484375}
+{'length': 68, 'accuracy': 0.595703125}
+{'length': 72, 'accuracy': 0.5078125}
+{'length': 76, 'accuracy': 0.44921875}
+{'length': 80, 'accuracy': 0.38671875}
+{'length': 84, 'accuracy': 0.31640625}
+{'length': 88, 'accuracy': 0.283203125}
+{'length': 92, 'accuracy': 0.244140625}
+{'length': 96, 'accuracy': 0.1953125}
+{'length': 100, 'accuracy': 0.14453125}
+Finish STACK-AUG (no PE) at 2025-07-20 21:41:57
+5) Start STACK-AUG (ALIBI) at 2025-07-20 17:59:54
 Best learning rate: 0.0005
-Best accuracy: 1.0
-{'length': 4, 'accuracy': 1.0}
+Best accuracy: 0.907265625
+{'length': 4, 'accuracy': 0.998046875}
 {'length': 8, 'accuracy': 1.0}
 {'length': 12, 'accuracy': 1.0}
 {'length': 16, 'accuracy': 1.0}
 {'length': 20, 'accuracy': 1.0}
 {'length': 24, 'accuracy': 1.0}
 {'length': 28, 'accuracy': 1.0}
-{'length': 32, 'accuracy': 1.0}
-{'length': 36, 'accuracy': 1.0}
-{'length': 40, 'accuracy': 1.0}
-{'length': 44, 'accuracy': 1.0}
-{'length': 48, 'accuracy': 1.0}
-{'length': 52, 'accuracy': 1.0}
-{'length': 56, 'accuracy': 1.0}
-{'length': 60, 'accuracy': 1.0}
-{'length': 64, 'accuracy': 1.0}
-{'length': 68, 'accuracy': 1.0}
-{'length': 72, 'accuracy': 1.0}
-{'length': 76, 'accuracy': 1.0}
-{'length': 80, 'accuracy': 1.0}
-{'length': 84, 'accuracy': 1.0}
-{'length': 88, 'accuracy': 1.0}
-{'length': 92, 'accuracy': 1.0}
-{'length': 96, 'accuracy': 1.0}
-{'length': 100, 'accuracy': 1.0}
-Finish STACK-AUG (no PE) at 2025-07-20 01:48:53
-5) Start STACK-AUG (ALIBI) at 2025-07-19 22:10:26
-Best learning rate: 0.001
-Best accuracy: 1.0
-{'length': 4, 'accuracy': 1.0}
-{'length': 8, 'accuracy': 1.0}
-{'length': 12, 'accuracy': 1.0}
-{'length': 16, 'accuracy': 1.0}
-{'length': 20, 'accuracy': 1.0}
-{'length': 24, 'accuracy': 1.0}
-{'length': 28, 'accuracy': 1.0}
-{'length': 32, 'accuracy': 1.0}
-{'length': 36, 'accuracy': 1.0}
-{'length': 40, 'accuracy': 1.0}
-{'length': 44, 'accuracy': 1.0}
-{'length': 48, 'accuracy': 1.0}
-{'length': 52, 'accuracy': 1.0}
-{'length': 56, 'accuracy': 1.0}
-{'length': 60, 'accuracy': 1.0}
-{'length': 64, 'accuracy': 1.0}
-{'length': 68, 'accuracy': 1.0}
-{'length': 72, 'accuracy': 1.0}
-{'length': 76, 'accuracy': 1.0}
-{'length': 80, 'accuracy': 1.0}
-{'length': 84, 'accuracy': 1.0}
-{'length': 88, 'accuracy': 1.0}
-{'length': 92, 'accuracy': 1.0}
-{'length': 96, 'accuracy': 1.0}
-{'length': 100, 'accuracy': 1.0}
-Finish STACK-AUG (ALIBI) at 2025-07-20 01:48:16
-
-=================================================================
-=========== TASK 3 of 4 : parity_check ==================
-=================================================================
-All variants finished for task=parity_check at 2025-07-20 05:29:54
------- Combined STDOUT Logs for parity_check ------
-1) Start STACK RNN at 2025-07-20 01:48:54
-Best learning rate: 0.001
-Best accuracy: 1.0
-{'length': 4, 'accuracy': 1.0}
-{'length': 8, 'accuracy': 1.0}
-{'length': 12, 'accuracy': 1.0}
-{'length': 16, 'accuracy': 1.0}
-{'length': 20, 'accuracy': 1.0}
-{'length': 24, 'accuracy': 1.0}
-{'length': 28, 'accuracy': 1.0}
-{'length': 32, 'accuracy': 1.0}
-{'length': 36, 'accuracy': 1.0}
-{'length': 40, 'accuracy': 1.0}
-{'length': 44, 'accuracy': 1.0}
-{'length': 48, 'accuracy': 1.0}
-{'length': 52, 'accuracy': 1.0}
-{'length': 56, 'accuracy': 1.0}
-{'length': 60, 'accuracy': 1.0}
-{'length': 64, 'accuracy': 1.0}
-{'length': 68, 'accuracy': 1.0}
-{'length': 72, 'accuracy': 1.0}
-{'length': 76, 'accuracy': 1.0}
-{'length': 80, 'accuracy': 1.0}
-{'length': 84, 'accuracy': 1.0}
-{'length': 88, 'accuracy': 1.0}
-{'length': 92, 'accuracy': 1.0}
-{'length': 96, 'accuracy': 1.0}
-{'length': 100, 'accuracy': 1.0}
-Finish STACK RNN at 2025-07-20 03:10:50
-2) Start TRANSFORMER (no PE) at 2025-07-20 01:48:54
-Best learning rate: 0.0001
-Best accuracy: 0.711171875
-{'length': 4, 'accuracy': 1.0}
-{'length': 8, 'accuracy': 1.0}
-{'length': 12, 'accuracy': 1.0}
-{'length': 16, 'accuracy': 1.0}
-{'length': 20, 'accuracy': 1.0}
-{'length': 24, 'accuracy': 1.0}
-{'length': 28, 'accuracy': 0.998046875}
 {'length': 32, 'accuracy': 0.994140625}
-{'length': 36, 'accuracy': 0.95703125}
-{'length': 40, 'accuracy': 0.890625}
-{'length': 44, 'accuracy': 0.748046875}
-{'length': 48, 'accuracy': 0.607421875}
-{'length': 52, 'accuracy': 0.537109375}
-{'length': 56, 'accuracy': 0.5390625}
-{'length': 60, 'accuracy': 0.513671875}
-{'length': 64, 'accuracy': 0.455078125}
-{'length': 68, 'accuracy': 0.501953125}
-{'length': 72, 'accuracy': 0.4921875}
-{'length': 76, 'accuracy': 0.501953125}
-{'length': 80, 'accuracy': 0.505859375}
-{'length': 84, 'accuracy': 0.4765625}
-{'length': 88, 'accuracy': 0.5234375}
-{'length': 92, 'accuracy': 0.49609375}
-{'length': 96, 'accuracy': 0.5078125}
-{'length': 100, 'accuracy': 0.533203125}
-Finish TRANSFORMER (no PE) at 2025-07-20 03:45:43
-3) Start TRANSFORMER (ALIBI) at 2025-07-20 01:48:54
-Best learning rate: 0.0001
-Best accuracy: 0.663828125
-{'length': 4, 'accuracy': 1.0}
-{'length': 8, 'accuracy': 1.0}
-{'length': 12, 'accuracy': 1.0}
-{'length': 16, 'accuracy': 0.998046875}
-{'length': 20, 'accuracy': 0.984375}
-{'length': 24, 'accuracy': 0.986328125}
-{'length': 28, 'accuracy': 0.96875}
-{'length': 32, 'accuracy': 0.8828125}
-{'length': 36, 'accuracy': 0.73828125}
-{'length': 40, 'accuracy': 0.6015625}
-{'length': 44, 'accuracy': 0.541015625}
-{'length': 48, 'accuracy': 0.51171875}
-{'length': 52, 'accuracy': 0.47265625}
-{'length': 56, 'accuracy': 0.47265625}
-{'length': 60, 'accuracy': 0.529296875}
-{'length': 64, 'accuracy': 0.490234375}
-{'length': 68, 'accuracy': 0.44921875}
-{'length': 72, 'accuracy': 0.51953125}
-{'length': 76, 'accuracy': 0.5}
-{'length': 80, 'accuracy': 0.53125}
-{'length': 84, 'accuracy': 0.513671875}
-{'length': 88, 'accuracy': 0.46484375}
-{'length': 92, 'accuracy': 0.470703125}
-{'length': 96, 'accuracy': 0.48828125}
-{'length': 100, 'accuracy': 0.48046875}
-Finish TRANSFORMER (ALIBI) at 2025-07-20 03:44:54
-4) Start STACK-AUG (no PE) at 2025-07-20 01:48:54
-Best learning rate: 0.0001
-Best accuracy: 0.63875
-{'length': 4, 'accuracy': 1.0}
-{'length': 8, 'accuracy': 0.966796875}
-{'length': 12, 'accuracy': 0.830078125}
-{'length': 16, 'accuracy': 0.681640625}
-{'length': 20, 'accuracy': 0.71484375}
-{'length': 24, 'accuracy': 0.765625}
-{'length': 28, 'accuracy': 0.88671875}
-{'length': 32, 'accuracy': 0.904296875}
-{'length': 36, 'accuracy': 0.853515625}
-{'length': 40, 'accuracy': 0.708984375}
-{'length': 44, 'accuracy': 0.60546875}
-{'length': 48, 'accuracy': 0.560546875}
-{'length': 52, 'accuracy': 0.525390625}
-{'length': 56, 'accuracy': 0.470703125}
-{'length': 60, 'accuracy': 0.4921875}
-{'length': 64, 'accuracy': 0.529296875}
-{'length': 68, 'accuracy': 0.484375}
-{'length': 72, 'accuracy': 0.515625}
-{'length': 76, 'accuracy': 0.537109375}
-{'length': 80, 'accuracy': 0.509765625}
-{'length': 84, 'accuracy': 0.517578125}
-{'length': 88, 'accuracy': 0.46875}
-{'length': 92, 'accuracy': 0.490234375}
-{'length': 96, 'accuracy': 0.474609375}
-{'length': 100, 'accuracy': 0.474609375}
-Finish STACK-AUG (no PE) at 2025-07-20 05:24:41
-5) Start STACK-AUG (ALIBI) at 2025-07-20 01:48:54
-Best learning rate: 0.0001
-Best accuracy: 0.660859375
-{'length': 4, 'accuracy': 1.0}
-{'length': 8, 'accuracy': 1.0}
-{'length': 12, 'accuracy': 1.0}
-{'length': 16, 'accuracy': 0.998046875}
-{'length': 20, 'accuracy': 0.99609375}
-{'length': 24, 'accuracy': 0.98046875}
-{'length': 28, 'accuracy': 0.92578125}
-{'length': 32, 'accuracy': 0.853515625}
-{'length': 36, 'accuracy': 0.728515625}
-{'length': 40, 'accuracy': 0.546875}
-{'length': 44, 'accuracy': 0.513671875}
-{'length': 48, 'accuracy': 0.517578125}
-{'length': 52, 'accuracy': 0.509765625}
-{'length': 56, 'accuracy': 0.4609375}
-{'length': 60, 'accuracy': 0.490234375}
-{'length': 64, 'accuracy': 0.52734375}
-{'length': 68, 'accuracy': 0.484375}
-{'length': 72, 'accuracy': 0.515625}
-{'length': 76, 'accuracy': 0.537109375}
-{'length': 80, 'accuracy': 0.509765625}
-{'length': 84, 'accuracy': 0.517578125}
-{'length': 88, 'accuracy': 0.46875}
-{'length': 92, 'accuracy': 0.490234375}
-{'length': 96, 'accuracy': 0.474609375}
-{'length': 100, 'accuracy': 0.474609375}
-Finish STACK-AUG (ALIBI) at 2025-07-20 05:29:54
-
+{'length': 36, 'accuracy': 0.9921875}
+{'length': 40, 'accuracy': 0.982421875}
+{'length': 44, 'accuracy': 0.96875}
+{'length': 48, 'accuracy': 0.9765625}
+{'length': 52, 'accuracy': 0.962890625}
+{'length': 56, 'accuracy': 0.939453125}
+{'length': 60, 'accuracy': 0.9375}
+{'length': 64, 'accuracy': 0.927734375}
+{'length': 68, 'accuracy': 0.89453125}
+{'length': 72, 'accuracy': 0.8515625}
+{'length': 76, 'accuracy': 0.826171875}
+{'length': 80, 'accuracy': 0.853515625}
+{'length': 84, 'accuracy': 0.798828125}
+{'length': 88, 'accuracy': 0.74609375}
+{'length': 92, 'accuracy': 0.705078125}
+{'length': 96, 'accuracy': 0.69921875}
+{'length': 100, 'accuracy': 0.626953125}
+Finish STACK-AUG (ALIBI) at 2025-07-20 21:40:35
 

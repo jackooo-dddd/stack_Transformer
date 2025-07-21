@@ -118,6 +118,6 @@ for idx in "${!TASKS[@]}"; do
   echo "------ Combined STDOUT Logs for $JOB_NAME ------"
   cat "$LOG1" "$LOG2" "$LOG3" "$LOG4" "$LOG5"
 
-  combined_err="result/PARA_tasks_regular.${SLURM_JOB_ID}.err"
+  combined_err="result/PARA_tasks_${SUBDIR}.${SLURM_JOB_ID}.err"
   cat "$ERR1" "$ERR2" "$ERR3" "$ERR4" "$ERR5" >> "$combined_err"
 done
