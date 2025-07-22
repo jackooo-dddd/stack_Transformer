@@ -4,8 +4,8 @@
 #SBATCH --mem=32000M
 #SBATCH --gpus-per-node=4         # Cedar only has 4 GPUs/node
 #SBATCH --cpus-per-task=10
-#SBATCH --output=result/PARA_tasks_counter.%j.out
-#SBATCH --error=result/PARA_tasks_counter.%j.err
+#SBATCH --output=result/PARA_tasks_counter_10000.%j.out
+#SBATCH --error=result/PARA_tasks_counter_10000.%j.err
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
@@ -15,7 +15,7 @@ if [[ -z "$1" ]]; then
   exit 1
 fi
 SUBDIR=$1
-STEPS=100000
+STEPS=10000
 
 if [[ "$SUBDIR" != "cs" && "$SUBDIR" != "dcf" && "$SUBDIR" != "regular" && "$SUBDIR" != "counter" ]]; then
   echo "Invalid argument: $SUBDIR"
