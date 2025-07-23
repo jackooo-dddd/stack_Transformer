@@ -110,12 +110,9 @@ class Shuffle6(task.GeneralizationTask):
                 seen_hard.add(t)
                 if sum(_is_valid_dyck_pair(seq, o, c) for o, c in bracket_types) == 5:
                     hard_final.append(seq)
-
-        # 3) Optionally include pure-random negatives for variety
         neg_list = hard_final.copy()
-        # (e.g., you could still append pure-random until len(neg_list)==half)
 
-        # 4) Stack and label
+        # 3) Stack and label
         pos = jnp.stack(pos_list) if pos_list else jnp.empty((0,length), jnp.int32)
         neg = jnp.stack(neg_list) if neg_list else jnp.empty((0,length), jnp.int32)
         strings = jnp.vstack([pos, neg])
