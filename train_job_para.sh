@@ -1,11 +1,11 @@
 #!/bin/bash
-#SBATCH --time=2-10:59:00
+#SBATCH --time=2-23:59:00
 #SBATCH --account=def-vumaiha
 #SBATCH --mem=32000M
 #SBATCH --gpus-per-node=4         # Cedar only has 4 GPUs/node
 #SBATCH --cpus-per-task=10
-#SBATCH --output=result/PARA_tasks_cs.%j.out
-#SBATCH --error=result/PARA_tasks_cs.%j.err
+#SBATCH --output=result/PARA_tasks_counter.%j.out
+#SBATCH --error=result/PARA_tasks_counter.%j.err
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
