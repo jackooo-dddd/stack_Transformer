@@ -9,10 +9,8 @@ import jax.random as jrandom
 
 from neural_networks_chomsky_hierarchy.tasks import task
 
-
-# Helpers for Dyck‑1 on an arbitrary symbol‑pair
 def _random_dyck_pair(length: int, open_sym: int, close_sym: int) -> jnp.ndarray:
-    assert length % 2 == 0, "Length must be even per bracket‑type"
+    assert length % 2 == 0, "Length must be even per bracket‑type for dyck pair"
     half = length // 2
     opens, closes = half, half
     depth = 0
@@ -32,6 +30,8 @@ def _random_dyck_pair(length: int, open_sym: int, close_sym: int) -> jnp.ndarray
 
 
 def _is_valid_dyck_pair(seq: jnp.ndarray, open_sym: int, close_sym: int) -> bool:
+    """Give one type of bracket, check if that type of bracket is valid inside the sequence.
+    NOTE that only if all types of bracket are valid inside the sequence, the sequence is valid."""
     depth = 0
     for x in seq.tolist():
         if x == open_sym:
@@ -49,68 +49,62 @@ class Shuffle6(task.GeneralizationTask):
                        8='⟨',9='⟩',10='⌈',11='⌉'"""
 
     def sample_batch(self, rng: jnp.ndarray, batch_size: int, length: int) -> Mapping[str, jnp.ndarray]:
-        # ‣ ensure even batch
+        """
+        rng: Random number generator
+        batch_size: How many samples we have to generate.
+        The batch_size need to be even since we want exactly half of positive and negative samples.
+        length: The length of the sequence we need to generate.
+        """
         assert batch_size % 2 == 0, "batch_size must be even"
         half = batch_size // 2
-
-        # ‣ round length up to multiple of 12
+        # round length up to multiple of 12, as we want all type of brackets to participate.
+        # 12 also makes the generation of each type of bracket more convenient.
         if length % 12 != 0:
             length += (12 - (length % 12))
-        sixth = length // 6
-
-        # split RNGs
+        length_each_type = length // 6
         rng_pos, rng_neg, rng_perm = jrandom.split(rng, 3)
         bracket_types = [(0,1),(2,3),(4,5),(6,7),(8,9),(10,11)]
 
         # 1) Generate positive examples by interleaving six Dyck‑1 sequences
-        seen_pos = set()
         pos_list = []
-        attempts = 0
-        while len(pos_list) < half and attempts < half * 300:
-            # generate 6 valid Dyck sequences
-            dycks = [_random_dyck_pair(sixth, o, c) for (o, c) in bracket_types]
-
+        while len(pos_list) < half:
+            # generate 6 valid Dyck sequences for each type of bracket.
+            dycks = [_random_dyck_pair(length_each_type, o, c) for (o, c) in bracket_types]
             # shuffle and merge
             rng_pos, rng_merge = jrandom.split(rng_pos)
             perm = jrandom.permutation(rng_merge, length).tolist()
             merged = [None] * length
+            # k is the index, seq is the corresponding sequence.
+            # Writes each pair of bracket into random positions of array merged, but will maintain the relative order
+            # in the bracket pair.
             for k, seq in enumerate(dycks):
-                block = sorted(perm[k * sixth: (k + 1) * sixth])
+                block = sorted(perm[k * length_each_type: (k + 1) * length_each_type])
                 for idx, val in zip(block, seq.tolist()):
                     merged[idx] = val
             arr = jnp.array(merged, dtype=jnp.int32)
-
-            # validate all six projections
             if all(_is_valid_dyck_pair(arr, o, c) for (o, c) in bracket_types):
-                key = tuple(merged)
-                if key not in seen_pos:
-                    seen_pos.add(key)
-                    pos_list.append(arr)
-            attempts += 1
+                pos_list.append(arr)
 
         # 2) Hard negatives: corrupt exactly one bracket type in each positive
+        # We directly generates the hard negative list from the positive examples.
         hard_neg_list = []
         for arr in pos_list:
             bad_type = random.randrange(len(bracket_types))
             o_sym, c_sym = bracket_types[bad_type]
             seq = list(arr.tolist())
-            idxs = [i for i, x in enumerate(seq) if x == o_sym or x == c_sym]
-            if not idxs:
+            # Find all indices of open and close symbols of this type
+            open_idxs = [i for i, x in enumerate(seq) if x == o_sym]
+            close_idxs = [i for i, x in enumerate(seq) if x == c_sym]
+            # Try to find a valid pair where open precedes close
+            candidate_pairs = [(i, j) for i in open_idxs for j in close_idxs if i < j]
+            if not candidate_pairs:
                 continue
-            i = random.choice(idxs)
-            seq[i] = o_sym if seq[i] == c_sym else c_sym
+            # Pick one valid (open, close) pair to corrupt by swapping them.
+            i, j = random.choice(candidate_pairs)
+            seq[i], seq[j] = seq[j], seq[i]
             hard_neg_list.append(jnp.array(seq, dtype=jnp.int32))
 
-        # filter to exactly half and ensure single-projection failure
-        seen_hard = set()
-        hard_final = []
-        for seq in hard_neg_list:
-            t = tuple(seq.tolist())
-            if t not in seen_hard and len(hard_final) < half:
-                seen_hard.add(t)
-                if sum(_is_valid_dyck_pair(seq, o, c) for o, c in bracket_types) == 5:
-                    hard_final.append(seq)
-        neg_list = hard_final.copy()
+        neg_list = hard_neg_list.copy()
 
         # 3) Stack and label
         pos = jnp.stack(pos_list) if pos_list else jnp.empty((0,length), jnp.int32)
@@ -121,11 +115,11 @@ class Shuffle6(task.GeneralizationTask):
             jnp.zeros(neg.shape[0], dtype=jnp.int32)
         ])
 
-        # 5) Shuffle batch
+        # 4) Shuffle batch
         perm = jrandom.permutation(rng_perm, strings.shape[0])
         strings, labels = strings[perm], labels[perm]
 
-        # 6) Dedupe & one-hot encode
+        # 5) Remove the duplicate data and builds (sequence, label) pairs.
         seen_f = set()
         final_s, final_l = [], []
         for s, l in zip(strings.tolist(), labels.tolist()):
@@ -142,7 +136,6 @@ class Shuffle6(task.GeneralizationTask):
         ⌈(⌈([{>><)(> -> out
         ⌈[{(<}])⌉>⟨⟩ -> in
         ({<{>⌈[⟨]⟩⌉) -> out"""
-        # # 5) Debug print (includes real positives)
         # symbol_map = {
         #     0:'(',1:')',2:'[',3:']',4:'{',5:'}',6:'<',7:'>',
         #     8:'⟨',9:'⟩',10:'⌈',11:'⌉'
