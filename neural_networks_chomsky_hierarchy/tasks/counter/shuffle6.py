@@ -21,13 +21,12 @@ def _random_dyck_pair(length: int, open_sym: int, close_sym: int) -> jnp.ndarray
         elif closes == 0 or depth == 0:
             choice = 'open'
         else:
-            choice = 'open' if random.random() < opens/(opens+closes) else 'close'
+            choice = 'open' if random.random() < opens / (opens + closes) else 'close'
         if choice == 'open':
             seq.append(open_sym); opens -= 1; depth += 1
         else:
             seq.append(close_sym); closes -= 1; depth -= 1
     return jnp.array(seq, dtype=jnp.int32)
-
 
 def _is_valid_dyck_pair(seq: jnp.ndarray, open_sym: int, close_sym: int) -> bool:
     """Give one type of bracket, check if that type of bracket is valid inside the sequence.
@@ -42,9 +41,10 @@ def _is_valid_dyck_pair(seq: jnp.ndarray, open_sym: int, close_sym: int) -> bool
             return False
     return depth == 0
 
-
 class Shuffle6(task.GeneralizationTask):
-    """Shuffle‑6: interleaving of six Dyck‑1 bracket languages.
+    """Shuffle‑6: interleaving of six Dyck‑1 bracket languages,
+       where each bracket type has a random even-length subsequence,
+       summing to the requested total length.
        Symbol mapping: 0='(',1=')',2='[',3=']',4='{',5='}',6='<',7='>',
                        8='⟨',9='⟩',10='⌈',11='⌉'"""
 
@@ -56,81 +56,111 @@ class Shuffle6(task.GeneralizationTask):
         length: The length of the sequence we need to generate.
         """
         assert batch_size % 2 == 0, "batch_size must be even"
-        half = batch_size // 2
-        # round length up to multiple of 12, as we want all type of brackets to participate.
-        # 12 also makes the generation of each type of bracket more convenient.
-        if length % 12 != 0:
-            length += (12 - (length % 12))
-        length_each_type = length // 6
+        half_bs = batch_size // 2
+
+        # --- 1) Enforce minimum length of 12 and evenness ---
+        if length < 12:
+            length = 12
+        if length % 2 != 0:
+            length += 1
+
+        # --- 2) Randomly split total_pairs = length//2 into 6 non-negative counts ---
+        # In any case, the length of each pair will be even.
+        total_pairs = length // 2
+        if total_pairs >= 6:
+            cuts = sorted(random.sample(range(1, total_pairs), 5))
+            boundaries = [0] + cuts + [total_pairs]
+            pair_counts = [boundaries[i+1] - boundaries[i] for i in range(6)]
+        else:
+            base = total_pairs // 6
+            extras = total_pairs % 6
+            pair_counts = [base + (1 if i < extras else 0) for i in range(6)]
+        # convert to token counts (2 tokens per pair)
+        br_lengths = [2 * p for p in pair_counts]
+        # print(br_lengths)
         rng_pos, rng_neg, rng_perm = jrandom.split(rng, 3)
         bracket_types = [(0,1),(2,3),(4,5),(6,7),(8,9),(10,11)]
 
-        # 1) Generate positive examples by interleaving six Dyck‑1 sequences
-        pos_list = []
-        while len(pos_list) < half:
-            # generate 6 valid Dyck sequences for each type of bracket.
-            dycks = [_random_dyck_pair(length_each_type, o, c) for (o, c) in bracket_types]
-            # shuffle and merge
+        # precompute index slices for each bracket type
+        idx_slices = []
+        start = 0
+        for L in br_lengths:
+            idx_slices.append((start, start + L))
+            start += L
+
+        # --- 3) Generate positive examples ---
+        pos_list: list[jnp.ndarray] = []
+        while len(pos_list) < half_bs:
+            # generate one Dyck-1 subsequence per type
+            dycks = [
+                _random_dyck_pair(br_lengths[i], o, c)
+                for i, (o, c) in enumerate(bracket_types)
+            ]
             rng_pos, rng_merge = jrandom.split(rng_pos)
             perm = jrandom.permutation(rng_merge, length).tolist()
             merged = [None] * length
-            # k is the index, seq is the corresponding sequence.
+
+            # i is the index, seq is the corresponding sequence.
             # Writes each pair of bracket into random positions of array merged, but will maintain the relative order
             # in the bracket pair.
-            for k, seq in enumerate(dycks):
-                block = sorted(perm[k * length_each_type: (k + 1) * length_each_type])
+            for i, seq in enumerate(dycks):
+                lo, hi = idx_slices[i]
+                block = sorted(perm[lo:hi])
                 for idx, val in zip(block, seq.tolist()):
                     merged[idx] = val
+
             arr = jnp.array(merged, dtype=jnp.int32)
             if all(_is_valid_dyck_pair(arr, o, c) for (o, c) in bracket_types):
                 pos_list.append(arr)
 
-        # 2) Hard negatives: corrupt exactly one bracket type in each positive
+        # --- 4) Generate hard negatives by swapping one matched pair ---
+        # Hard negatives: corrupt exactly one bracket type in each positive
         # We directly generates the hard negative list from the positive examples.
-        hard_neg_list = []
+        hard_neg_list: list[jnp.ndarray] = []
         for arr in pos_list:
-            bad_type = random.randrange(len(bracket_types))
-            o_sym, c_sym = bracket_types[bad_type]
+            bad = random.randrange(6)
+            o_sym, c_sym = bracket_types[bad]
             seq = list(arr.tolist())
             # Find all indices of open and close symbols of this type
-            open_idxs = [i for i, x in enumerate(seq) if x == o_sym]
-            close_idxs = [i for i, x in enumerate(seq) if x == c_sym]
+            opens = [i for i,x in enumerate(seq) if x == o_sym]
+            closes = [i for i,x in enumerate(seq) if x == c_sym]
             # Try to find a valid pair where open precedes close
-            candidate_pairs = [(i, j) for i in open_idxs for j in close_idxs if i < j]
-            if not candidate_pairs:
+            pairs = [(i,j) for i in opens for j in closes if i < j]
+            if not pairs:
                 continue
             # Pick one valid (open, close) pair to corrupt by swapping them.
-            i, j = random.choice(candidate_pairs)
+            i, j = random.choice(pairs)
             seq[i], seq[j] = seq[j], seq[i]
             hard_neg_list.append(jnp.array(seq, dtype=jnp.int32))
 
-        neg_list = hard_neg_list.copy()
+        neg_list = hard_neg_list
 
-        # 3) Stack and label
-        pos = jnp.stack(pos_list) if pos_list else jnp.empty((0,length), jnp.int32)
-        neg = jnp.stack(neg_list) if neg_list else jnp.empty((0,length), jnp.int32)
-        strings = jnp.vstack([pos, neg])
+        # --- 5) Stack, shuffle, remove duplicates, and one-hot encode ---
+        pos_arr = jnp.stack(pos_list)
+        neg_arr = (jnp.stack(neg_list)
+                   if neg_list else jnp.empty((0, length), jnp.int32))
+
+        strings = jnp.vstack([pos_arr, neg_arr])
         labels  = jnp.concatenate([
-            jnp.ones(pos.shape[0],  dtype=jnp.int32),
-            jnp.zeros(neg.shape[0], dtype=jnp.int32)
+            jnp.ones(pos_arr.shape[0],  dtype=jnp.int32),
+            jnp.zeros(neg_arr.shape[0], dtype=jnp.int32)
         ])
+        permute = jrandom.permutation(rng_perm, strings.shape[0])
+        strings, labels = strings[permute], labels[permute]
 
-        # 4) Shuffle batch
-        perm = jrandom.permutation(rng_perm, strings.shape[0])
-        strings, labels = strings[perm], labels[perm]
-
-        # 5) Remove the duplicate data and builds (sequence, label) pairs.
-        seen_f = set()
-        final_s, final_l = [], []
+        seen = set()
+        final_s: list[list[int]] = []
+        final_l: list[int] = []
         for s, l in zip(strings.tolist(), labels.tolist()):
-            pair = (tuple(s), int(l))
-            if pair not in seen_f:
-                seen_f.add(pair)
+            key = (tuple(s), int(l))
+            if key not in seen:
+                seen.add(key)
                 final_s.append(s)
                 final_l.append(l)
 
         one_hot_in  = jnn.one_hot(jnp.array(final_s), num_classes=12)
         one_hot_out = jnn.one_hot(jnp.array(final_l), num_classes=2)
+
         """SOME EXAMPLES: <{{<>(⌈><)⟨⟨ -> out
         <⟨[⌈(⟩{])}⌉> -> in
         ⌈(⌈([{>><)(> -> out

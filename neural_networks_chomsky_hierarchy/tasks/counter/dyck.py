@@ -9,7 +9,6 @@ import jax.random as jrandom
 
 from neural_networks_chomsky_hierarchy.tasks import task
 
-
 def _random_dyck_sequence(length: int) -> jnp.ndarray:
     assert length % 2 == 0, "Length must be even for Dyck-1 strings"
     half = length // 2
@@ -34,8 +33,8 @@ def _random_dyck_sequence(length: int) -> jnp.ndarray:
             depth -= 1
     return jnp.array(seq, dtype=jnp.int32)
 
-
 def _is_valid_dyck(seq: jnp.ndarray) -> bool:
+    """Check that a sequence of 0/1 tokens is a valid balanced-parentheses (Dyck-1) string."""
     depth = 0
     for x in seq.tolist():
         depth += 1 if x == 0 else -1
@@ -43,61 +42,53 @@ def _is_valid_dyck(seq: jnp.ndarray) -> bool:
             return False
     return depth == 0
 
-
 class Dyck1(task.GeneralizationTask):
     """A task to decide membership in the Dyck-1 language (balanced parentheses)."""
 
     def sample_batch(self, rng: jnp.ndarray, batch_size: int, length: int) -> Mapping[str, jnp.ndarray]:
-        if length % 2 == 1:
+        assert batch_size % 2 == 0, "batch_size must be even"
+        num_pos = batch_size // 2
+        num_neg = batch_size - num_pos
+        rng_pos, rng_neg, rng_perm = jrandom.split(rng, 3)
+
+        # --- 1) Enforce minimum length of 2 and evenness ---
+        if length < 2:
+            length = 2
+        if length % 2 != 0:
             length += 1
 
-        num_balanced = batch_size // 2
-        num_unbalanced = batch_size - num_balanced
-        rng_bal, rng_unb, rng_perm = jrandom.split(rng, 3)
-
-        # Generate balanced strings efficiently
-        seen_balanced = set()
-        balanced_list = []
-        max_attempts = num_balanced * 10
+        # --- 2) Generate balanced (positive) examples ---
+        seen_pos = set()
+        balanced_list: list[jnp.ndarray] = []
         attempts = 0
-        while len(balanced_list) < num_balanced and attempts < max_attempts:
+        while len(balanced_list) < num_pos and attempts < num_pos * 10:
             arr = _random_dyck_sequence(length)
             key = tuple(arr.tolist())
-            if key not in seen_balanced:
-                seen_balanced.add(key)
+            if key not in seen_pos:
+                seen_pos.add(key)
                 balanced_list.append(arr)
             attempts += 1
 
-        if not balanced_list:
-            return {"input": jnp.empty((0, length, 2)), "output": jnp.empty((0, 2))}
-
-        balanced = jnp.stack(balanced_list)
-
-        # --- Hard negatives: flip exactly one bracket in a balanced sequence ---
-        hard_neg_list = []
+        # --- 3) Generate hard negatives by swapping one matched pair ---
+        hard_neg_list: list[jnp.ndarray] = []
         for arr in balanced_list:
             seq = list(arr.tolist())
-            # pick a random position and flip it
-            i = random.randrange(length)
-            seq[i] = 0 if seq[i] == 1 else 1
+            opens = [i for i, x in enumerate(seq) if x == 0]
+            closes = [j for j, x in enumerate(seq) if x == 1]
+            pairs = [(i, j) for i in opens for j in closes if i < j]
+            if not pairs:
+                continue
+            i, j = random.choice(pairs)
+            seq[i], seq[j] = seq[j], seq[i]
             neg_arr = jnp.array(seq, dtype=jnp.int32)
             if not _is_valid_dyck(neg_arr):
                 hard_neg_list.append(neg_arr)
 
-        # pick up to num_unbalanced of these hard negatives (deduped)
-        seen_hard = set()
-        hard_final = []
-        for arr in hard_neg_list:
-            key = tuple(arr.tolist())
-            if key not in seen_hard and len(hard_final) < num_unbalanced:
-                seen_hard.add(key)
-                hard_final.append(arr)
-
-        # if we still need more negatives, fall back to random sampling
-        seen_all = set(seen_balanced)
-        neg_list = hard_final.copy()
+        # --- 4) Fallback to random negatives if needed ---
+        neg_list = hard_neg_list.copy()
+        seen_all = set(seen_pos)
         attempts = 0
-        while len(neg_list) < num_unbalanced and attempts < num_unbalanced * 10:
+        while len(neg_list) < num_neg and attempts < num_neg * 10:
             py_seq = [random.choice([0, 1]) for _ in range(length)]
             arr = jnp.array(py_seq, dtype=jnp.int32)
             key = tuple(py_seq)
@@ -106,35 +97,19 @@ class Dyck1(task.GeneralizationTask):
                 neg_list.append(arr)
             attempts += 1
 
-        # Stack, label, shuffle
-        pos = jnp.stack(balanced_list) if balanced_list else jnp.empty((0, length), jnp.int32)
-        neg = jnp.stack(neg_list) if neg_list else jnp.empty((0, length), jnp.int32)
-        strings = jnp.vstack([pos, neg])
-        labels = jnp.concatenate([
-            jnp.ones(pos.shape[0], dtype=jnp.int32),
-            jnp.zeros(neg.shape[0], dtype=jnp.int32)
+        # --- 5) Stack, shuffle, dedupe, and one-hot encode ---
+        pos_arr = jnp.stack(balanced_list) if balanced_list else jnp.empty((0, length), jnp.int32)
+        neg_arr = jnp.stack(neg_list) if neg_list else jnp.empty((0, length), jnp.int32)
+        strings = jnp.vstack([pos_arr, neg_arr])
+        labels  = jnp.concatenate([
+            jnp.ones(pos_arr.shape[0], dtype=jnp.int32),
+            jnp.zeros(neg_arr.shape[0], dtype=jnp.int32)
         ])
         perm = jrandom.permutation(rng_perm, strings.shape[0])
         strings, labels = strings[perm], labels[perm]
 
-        strings_list = strings.tolist()
-        labels_list = labels.tolist()
-        seen_pairs = set()
-        filtered_strings = []
-        filtered_labels = []
-        for s, l in zip(strings_list, labels_list):
-            pair = (tuple(s), l)
-            if pair not in seen_pairs:
-                seen_pairs.add(pair)
-                filtered_strings.append(s)
-                filtered_labels.append(l)
-
-        one_hot_strings = jnn.one_hot(jnp.array(filtered_strings), num_classes=2)
-        labels_onehot = jnn.one_hot(jnp.array(filtered_labels), num_classes=2)
-
         """SOME EXAMPLES: ())(())) -> unbalanced
         )))()((( -> unbalanced
-        (()))(())())()(((()))) -> unbalanced
         ()()(()) -> balanced
         ()(()((( -> unbalanced        """
         # Human-readable printout: bracket form and membership
@@ -146,7 +121,19 @@ class Dyck1(task.GeneralizationTask):
         #     type_str = 'balanced' if lab == 1 else 'unbalanced'
         #     print(f"{brackets} -> {type_str}")
 
-        return {"input": one_hot_strings, "output": labels_onehot}
+        # Final dedupe
+        seen_final = set()
+        filt_str, filt_lbl = [], []
+        for s, l in zip(strings.tolist(), labels.tolist()):
+            pair = (tuple(s), int(l))
+            if pair not in seen_final:
+                seen_final.add(pair)
+                filt_str.append(s)
+                filt_lbl.append(l)
+
+        one_hot_in  = jnn.one_hot(jnp.array(filt_str), num_classes=2)
+        one_hot_out = jnn.one_hot(jnp.array(filt_lbl), num_classes=2)
+        return {"input": one_hot_in, "output": one_hot_out}
 
     @property
     def input_size(self) -> int:
@@ -155,4 +142,3 @@ class Dyck1(task.GeneralizationTask):
     @property
     def output_size(self) -> int:
         return 2
-

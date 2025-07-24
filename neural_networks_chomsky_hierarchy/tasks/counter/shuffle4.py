@@ -9,10 +9,8 @@ import jax.random as jrandom
 
 from neural_networks_chomsky_hierarchy.tasks import task
 
-
-# Helpers for Dyck‑1 on an arbitrary symbol‑pair
 def _random_dyck_pair(length: int, open_sym: int, close_sym: int) -> jnp.ndarray:
-    assert length % 2 == 0, "Length must be even per bracket‑type"
+    assert length % 2 == 0, "Length must be even per bracket‑type for dyck pair"
     half = length // 2
     opens, closes = half, half
     depth = 0
@@ -23,15 +21,16 @@ def _random_dyck_pair(length: int, open_sym: int, close_sym: int) -> jnp.ndarray
         elif closes == 0 or depth == 0:
             choice = 'open'
         else:
-            choice = 'open' if random.random() < opens/(opens+closes) else 'close'
+            choice = 'open' if random.random() < opens / (opens + closes) else 'close'
         if choice == 'open':
             seq.append(open_sym); opens -= 1; depth += 1
         else:
             seq.append(close_sym); closes -= 1; depth -= 1
     return jnp.array(seq, dtype=jnp.int32)
 
-
 def _is_valid_dyck_pair(seq: jnp.ndarray, open_sym: int, close_sym: int) -> bool:
+    """Give one type of bracket, check if that type of bracket is valid inside the sequence.
+    NOTE that only if all types of bracket are valid inside the sequence, the sequence is valid."""
     depth = 0
     for x in seq.tolist():
         if x == open_sym:
@@ -42,197 +41,137 @@ def _is_valid_dyck_pair(seq: jnp.ndarray, open_sym: int, close_sym: int) -> bool
             return False
     return depth == 0
 
-
-class Shuffle6(task.GeneralizationTask):
-    """Shuffle‑6: interleaving of six Dyck‑1 bracket languages.
-       Symbol mapping: 0='(',1=')',2='[',3=']',4='{',5='}',6='<',7='>',
-                       8='⟨',9='⟩',10='⌈',11='⌉'"""
-
-    def sample_batch(self, rng: jnp.ndarray, batch_size: int, length: int) -> Mapping[str, jnp.ndarray]:
-        assert batch_size % 2 == 0, "batch_size must be even"
-        half = batch_size // 2
-
-        if length % 12 != 0:
-            length += (12 - (length % 12))
-        sixth = length // 6
-
-        rng_pos, rng_neg, rng_perm = jrandom.split(rng, 3)
-        bracket_types = [(0,1),(2,3),(4,5),(6,7),(8,9),(10,11)]
-
-        # 1) positives
-        seen_pos = set()
-        pos_list = []
-        attempts = 0
-        while len(pos_list) < half and attempts < half * 300:
-            dycks = [_random_dyck_pair(sixth, o, c) for (o, c) in bracket_types]
-            rng_pos, rng_merge = jrandom.split(rng_pos)
-            perm = jrandom.permutation(rng_merge, length).tolist()
-            merged = [None] * length
-            for k, seq in enumerate(dycks):
-                block = sorted(perm[k * sixth: (k + 1) * sixth])
-                for idx, val in zip(block, seq.tolist()):
-                    merged[idx] = val
-            arr = jnp.array(merged, dtype=jnp.int32)
-            if all(_is_valid_dyck_pair(arr, o, c) for (o, c) in bracket_types):
-                key = tuple(merged)
-                if key not in seen_pos:
-                    seen_pos.add(key)
-                    pos_list.append(arr)
-            attempts += 1
-
-        # 2) Hard negatives for Shuffle6
-        hard_neg_list = []
-        for arr in pos_list:
-            bad = random.randrange(len(bracket_types))
-            o_sym, c_sym = bracket_types[bad]
-            seq = list(arr.tolist())
-            idxs = [i for i, x in enumerate(seq) if x in (o_sym, c_sym)]
-            if not idxs:
-                continue
-            i = random.choice(idxs)
-            seq[i] = o_sym if seq[i] == c_sym else c_sym
-            hard_neg_list.append(jnp.array(seq, dtype=jnp.int32))
-
-        seen_hard = set()
-        hard_final = []
-        for seq in hard_neg_list:
-            t = tuple(seq.tolist())
-            if t not in seen_hard and len(hard_final) < half:
-                seen_hard.add(t)
-                if sum(_is_valid_dyck_pair(seq, o, c) for o, c in bracket_types) == 5:
-                    hard_final.append(seq)
-        neg_list = hard_final.copy()
-
-        # 3) stack, shuffle, dedupe, one-hot
-        pos = jnp.stack(pos_list) if pos_list else jnp.empty((0,length), jnp.int32)
-        neg = jnp.stack(neg_list) if neg_list else jnp.empty((0,length), jnp.int32)
-        strings = jnp.vstack([pos, neg])
-        labels  = jnp.concatenate([
-            jnp.ones(pos.shape[0],  dtype=jnp.int32),
-            jnp.zeros(neg.shape[0], dtype=jnp.int32)
-        ])
-        perm = jrandom.permutation(rng_perm, strings.shape[0])
-        strings, labels = strings[perm], labels[perm]
-
-        seen_f = set()
-        final_s, final_l = [], []
-        for s, l in zip(strings.tolist(), labels.tolist()):
-            pair = (tuple(s), int(l))
-            if pair not in seen_f:
-                seen_f.add(pair)
-                final_s.append(s)
-                final_l.append(l)
-
-        one_hot_in  = jnn.one_hot(jnp.array(final_s), num_classes=12)
-        one_hot_out = jnn.one_hot(jnp.array(final_l), num_classes=2)
-        return {"input": one_hot_in, "output": one_hot_out}
-
-    @property
-    def input_size(self) -> int:
-        return 12
-
-    @property
-    def output_size(self) -> int:
-        return 2
-
-
 class Shuffle4(task.GeneralizationTask):
-    """Shuffle‑4: interleaving of four Dyck‑1 bracket types.
-       Symbol mapping: 0='(',1=')', 2='[',3=']', 4='{',5='}', 6='<',7='>'"""
+    """Shuffle‑4: interleaving of four Dyck‑1 bracket languages,
+       where each bracket type has a random even-length subsequence,
+       summing to the requested total length.
+       Symbol mapping: 0='(',1=')',2='[',3=']',4='{',5='}',6='<',7='>'"""
 
     def sample_batch(self, rng: jnp.ndarray, batch_size: int, length: int) -> Mapping[str, jnp.ndarray]:
+        """
+        rng: Random number generator
+        batch_size: How many samples we have to generate.
+        The batch_size need to be even since we want exactly half of positive and negative samples.
+        length: The length of the sequence we need to generate.
+        """
         assert batch_size % 2 == 0, "batch_size must be even"
-        half = batch_size // 2
+        half_bs = batch_size // 2
 
-        if length % 8 != 0:
-            length += (8 - (length % 8))
-        quarter = length // 4
+        # --- 1) Enforce minimum length of 8 and evenness ---
+        if length < 8:
+            length = 8
+        if length % 2 != 0:
+            length += 1
 
+        # --- 2) Randomly split total_pairs = length//2 into 4 non-negative counts ---
+        # In any case, the length of each pair will be even.
+        total_pairs = length // 2
+        if total_pairs >= 4:
+            cuts = sorted(random.sample(range(1, total_pairs), 3))
+            boundaries = [0] + cuts + [total_pairs]
+            pair_counts = [boundaries[i+1] - boundaries[i] for i in range(4)]
+        else:
+            base = total_pairs // 4
+            extras = total_pairs % 4
+            pair_counts = [base + (1 if i < extras else 0) for i in range(4)]
+        # convert to token counts (2 tokens per pair)
+        br_lengths = [2 * p for p in pair_counts]
+        # print(br_lengths)
         rng_pos, rng_neg, rng_perm = jrandom.split(rng, 3)
         bracket_types = [(0,1),(2,3),(4,5),(6,7)]
 
-        # 1) positives
-        seen_pos = set()
-        pos_list = []
-        attempts = 0
-        while len(pos_list) < half and attempts < half * 20:
-            parts = [_random_dyck_pair(quarter, o, c) for (o, c) in bracket_types]
+        # precompute index slices for each bracket type
+        idx_slices = []
+        start = 0
+        for L in br_lengths:
+            idx_slices.append((start, start + L))
+            start += L
+
+        # --- 3) Generate positive examples ---
+        pos_list: list[jnp.ndarray] = []
+        while len(pos_list) < half_bs:
+            # generate one Dyck-1 subsequence per type
+            dycks = [
+                _random_dyck_pair(br_lengths[i], o, c)
+                for i, (o, c) in enumerate(bracket_types)
+            ]
             rng_pos, rng_merge = jrandom.split(rng_pos)
             perm = jrandom.permutation(rng_merge, length).tolist()
-            shuffled = [None] * length
-            for k, part in enumerate(parts):
-                block = sorted(perm[k * quarter: (k + 1) * quarter])
-                for idx, sym in zip(block, part.tolist()):
-                    shuffled[idx] = sym
-            arr = jnp.array(shuffled, dtype=jnp.int32)
-            if all(_is_valid_dyck_pair(arr, o, c) for (o, c) in bracket_types):
-                key = tuple(shuffled)
-                if key not in seen_pos:
-                    seen_pos.add(key)
-                    pos_list.append(arr)
-            attempts += 1
+            merged = [None] * length
 
-        # 2) Hard negatives for Shuffle4
-        hard_neg_list = []
+            # i is the index, seq is the corresponding sequence.
+            # Writes each pair of bracket into random positions of array merged, but will maintain the relative order
+            # in the bracket pair.
+            for i, seq in enumerate(dycks):
+                lo, hi = idx_slices[i]
+                block = sorted(perm[lo:hi])
+                for idx, val in zip(block, seq.tolist()):
+                    merged[idx] = val
+
+            arr = jnp.array(merged, dtype=jnp.int32)
+            if all(_is_valid_dyck_pair(arr, o, c) for (o, c) in bracket_types):
+                pos_list.append(arr)
+
+        # --- 4) Generate hard negatives by swapping one matched pair ---
+        # Hard negatives: corrupt exactly one bracket type in each positive
+        # We directly generates the hard negative list from the positive examples.
+        hard_neg_list: list[jnp.ndarray] = []
         for arr in pos_list:
-            bad = random.randrange(len(bracket_types))
+            bad = random.randrange(4)
             o_sym, c_sym = bracket_types[bad]
             seq = list(arr.tolist())
-            idxs = [i for i, x in enumerate(seq) if x in (o_sym, c_sym)]
-            if not idxs:
+            # Find all indices of open and close symbols of this type
+            opens = [i for i,x in enumerate(seq) if x == o_sym]
+            closes = [i for i,x in enumerate(seq) if x == c_sym]
+            # Try to find a valid pair where open precedes close
+            pairs = [(i,j) for i in opens for j in closes if i < j]
+            if not pairs:
                 continue
-            i = random.choice(idxs)
-            seq[i] = o_sym if seq[i] == c_sym else c_sym
+            # Pick one valid (open, close) pair to corrupt by swapping them.
+            i, j = random.choice(pairs)
+            seq[i], seq[j] = seq[j], seq[i]
             hard_neg_list.append(jnp.array(seq, dtype=jnp.int32))
 
-        seen_hard = set()
-        hard_final = []
-        for seq in hard_neg_list:
-            t = tuple(seq.tolist())
-            if t not in seen_hard and len(hard_final) < half:
-                seen_hard.add(t)
-                if sum(_is_valid_dyck_pair(seq, o, c) for o, c in bracket_types) == 3:
-                    hard_final.append(seq)
-        neg_list = hard_final.copy()
+        neg_list = hard_neg_list
 
-        # 3) stack and label
-        pos = jnp.stack(pos_list) if pos_list else jnp.empty((0, length), jnp.int32)
-        neg = jnp.stack(neg_list) if neg_list else jnp.empty((0, length), jnp.int32)
-        strings = jnp.vstack([pos, neg])
-        labels = jnp.concatenate([
-            jnp.ones(pos.shape[0], dtype=jnp.int32),
-            jnp.zeros(neg.shape[0], dtype=jnp.int32)
+        # --- 5) Stack, shuffle, remove duplicates, and one-hot encode ---
+        pos_arr = jnp.stack(pos_list)
+        neg_arr = (jnp.stack(neg_list)
+                   if neg_list else jnp.empty((0, length), jnp.int32))
+
+        strings = jnp.vstack([pos_arr, neg_arr])
+        labels  = jnp.concatenate([
+            jnp.ones(pos_arr.shape[0],  dtype=jnp.int32),
+            jnp.zeros(neg_arr.shape[0], dtype=jnp.int32)
         ])
+        permute = jrandom.permutation(rng_perm, strings.shape[0])
+        strings, labels = strings[permute], labels[permute]
 
-        # 4) shuffle entire batch
-        perm = jrandom.permutation(rng_perm, strings.shape[0])
-        strings, labels = strings[perm], labels[perm]
-        """SOME EXAMPLES: >{)}><{{<[[]}>[]][{{(][< -> out
-        (<[{}>{)({<})}]>([[[]<)> -> out
-        (((]}({]{>[>)(<]}}[>>(]{ -> out
-        {[]<{<>(<)({(>}[])>[)}]} -> in
-        <>[{()(}][{<(}>][){<>}]) -> in        """
-        # # 5) human-readable example prints
-        # symbol_map = {
-        #     0: '(', 1: ')', 2: '[', 3: ']', 4: '{', 5: '}', 6: '<', 7: '>',
-        #     8: '⟨', 9: '⟩', 10: '⌈', 11: '⌉'
-        # }
-        # for seq, lab in zip(strings.tolist(), labels.tolist()):
-        #     br = ''.join(symbol_map[x] for x in seq)
-        #     print(f"{br} -> {'in' if lab == 1 else 'out'}")
-
-        # 6) dedupe & one-hot
-        seen_f = set()
-        final_s, final_l = [], []
+        seen = set()
+        final_s: list[list[int]] = []
+        final_l: list[int] = []
         for s, l in zip(strings.tolist(), labels.tolist()):
-            pair = (tuple(s), int(l))
-            if pair not in seen_f:
-                seen_f.add(pair)
+            key = (tuple(s), int(l))
+            if key not in seen:
+                seen.add(key)
                 final_s.append(s)
                 final_l.append(l)
 
-        one_hot_in = jnn.one_hot(jnp.array(final_s), num_classes=8)
+        one_hot_in  = jnn.one_hot(jnp.array(final_s), num_classes=8)
         one_hot_out = jnn.one_hot(jnp.array(final_l), num_classes=2)
+
+        """SOME EXAMPLES: >{)}><{{<[[]}>[]][{{(][< -> out
+        (((]}({]{>[>)(<]}}[>>(]{ -> out
+        {[]<{<>(<)({(>}[])>[)}]} -> in
+        <>[{()(}][{<(}>][){<>}]) -> in        """
+        # symbol_map = {
+        #     0:'(',1:')',2:'[',3:']',4:'{',5:'}',6:'<',7:'>'
+        # }
+        # print("Batch samples:")
+        # for seq, lab in zip(strings.tolist(), labels.tolist()):
+        #     br = ''.join(symbol_map[x] for x in seq)
+        #     print(f"{br} -> {'in' if lab==1 else 'out'}")
+
         return {"input": one_hot_in, "output": one_hot_out}
 
     @property
