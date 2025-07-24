@@ -1,0 +1,87 @@
+=== Task: reverse_string ===
+architecture	PE	using_stack	learning_rate	accuracy
+Stack_RNN	NONE	False	0.001	1.0
+Stack_RNN	NONE	False	0.0005	1.0
+Stack_RNN	NONE	False	0.0001	1.0
+Stack_RNN	NONE	False	5e-05	1.0
+Transformer	NONE	False	0.001	0.5678502257168293
+Transformer	NONE	False	0.0005	0.5681937637925148
+Transformer	NONE	False	0.0001	0.5677611209452152
+Transformer	NONE	False	5e-05	0.5669167266786098
+Transformer	ALIBI	False	0.001	0.8409660691022873
+Transformer	ALIBI	False	0.0005	0.867369047999382
+Transformer	ALIBI	False	0.0001	0.8475419211387635
+Transformer	ALIBI	False	5e-05	0.8375949940085411
+Transformer	NONE	True	0.001	0.5676173776388168
+Transformer	NONE	True	0.0005	1.0
+Transformer	NONE	True	0.0001	1.0
+Transformer	NONE	True	5e-05	1.0
+Transformer	ALIBI	True	0.001	0.9997332371771336
+Transformer	ALIBI	True	0.0005	1.0
+Transformer	ALIBI	True	0.0001	1.0
+Transformer	ALIBI	True	5e-05	0.9999984049797058
+
+=== Task: modular_arithmetic_brackets ===
+architecture	PE	using_stack	learning_rate	accuracy
+Stack_RNN	NONE	False	0.001	0.831875
+Stack_RNN	NONE	False	0.0005	0.73890625
+Stack_RNN	NONE	False	0.0001	0.4965625
+Stack_RNN	NONE	False	5e-05	0.426328125
+Transformer	NONE	False	0.001	0.308125
+Transformer	NONE	False	0.0005	0.343828125
+Transformer	NONE	False	0.0001	0.34609375
+Transformer	NONE	False	5e-05	0.343203125
+Transformer	ALIBI	False	0.001	0.287265625
+Transformer	ALIBI	False	0.0005	0.420234375
+Transformer	ALIBI	False	0.0001	0.4003125
+Transformer	ALIBI	False	5e-05	0.380703125
+Transformer	NONE	True	0.001	0.30734375
+Transformer	NONE	True	0.0005	0.371328125
+Transformer	NONE	True	0.0001	0.375546875
+Transformer	NONE	True	5e-05	0.371015625
+Transformer	ALIBI	True	0.001	0.291015625
+Transformer	ALIBI	True	0.0005	0.421015625
+Transformer	ALIBI	True	0.0001	0.416015625
+Transformer	ALIBI	True	5e-05	0.394296875
+
+=== Task: solve_equation ===
+architecture	PE	using_stack	learning_rate	accuracy
+Stack_RNN	NONE	False	0.001	0.913203125
+Stack_RNN	NONE	False	0.0005	0.90171875
+Stack_RNN	NONE	False	0.0001	0.39859375
+Stack_RNN	NONE	False	5e-05	0.318359375
+Transformer	NONE	False	0.001	0.19796875
+Transformer	NONE	False	0.0005	0.252578125
+Transformer	NONE	False	0.0001	0.2734375
+Transformer	NONE	False	5e-05	0.25984375
+Transformer	ALIBI	False	0.001	0.19890625
+Transformer	ALIBI	False	0.0005	0.30171875
+Transformer	ALIBI	False	0.0001	0.364296875
+Transformer	ALIBI	False	5e-05	0.31
+Transformer	NONE	True	0.001	0.202890625
+Transformer	NONE	True	0.0005	0.27046875
+Transformer	NONE	True	0.0001	0.308359375
+Transformer	NONE	True	5e-05	0.306171875
+Transformer	ALIBI	True	0.001	0.20390625
+Transformer	ALIBI	True	0.0005	0.260703125
+Transformer	ALIBI	True	0.0001	0.365078125
+Transformer	ALIBI	True	5e-05	0.329609375
+
+=== Task: stack_manipulation ===
+architecture	PE	using_stack	learning_rate	accuracy
+Stack_RNN	NONE	False	0.001	0.9995782561600208
+Stack_RNN	NONE	False	0.0005	0.999999998062849
+Stack_RNN	NONE	False	0.0001	0.999999998062849
+Stack_RNN	NONE	False	5e-05	0.999999998062849
+Transformer	NONE	False	0.001	0.5003409473598004
+Transformer	NONE	False	0.0005	0.501941694393754
+Transformer	NONE	False	0.0001	0.5021975834667682
+Transformer	NONE	False	5e-05	0.5014928050339222
+Transformer	ALIBI	False	0.001	0.8268828082084656
+Transformer	ALIBI	False	0.0005	0.8109163987636566
+Transformer	ALIBI	False	0.0001	0.8188789032399655
+Transformer	ALIBI	False	5e-05	0.8045074893534183
+Transformer	NONE	True	0.001	0.9916604971885681
+Transformer	NONE	True	0.0005	0.9975393532216549
+Transformer	NONE	True	0.0001	0.9458714510500431
+Transformer	NONE	True	5e-05	0.9443551668524742
