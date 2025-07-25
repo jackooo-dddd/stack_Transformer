@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --time=2-23:59:00
+#SBATCH --time=1-23:59:00
 #SBATCH --account=def-vumaiha
 #SBATCH --mem=32000M
 #SBATCH --gpus-per-node=4         # Cedar only has 4 GPUs/node
@@ -15,7 +15,7 @@ if [[ -z "$1" ]]; then
   exit 1
 fi
 SUBDIR=$1
-STEPS=100000
+STEPS=50000
 
 if [[ "$SUBDIR" != "cs" && "$SUBDIR" != "dcf" && "$SUBDIR" != "regular" && "$SUBDIR" != "counter" ]]; then
   echo "Invalid argument: $SUBDIR"
