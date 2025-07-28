@@ -9,6 +9,9 @@ import jax.random as jrandom
 
 from neural_networks_chomsky_hierarchy.tasks import task
 
+x = """([[)([)(]]])"""
+
+
 def _random_dyck_pair(length: int, open_sym: int, close_sym: int) -> jnp.ndarray:
     assert length % 2 == 0, "Length must be even per bracket‑type for dyck pair"
     half = length // 2
@@ -140,7 +143,7 @@ class Shuffle2(task.GeneralizationTask):
         """SOME EXAMPLES: [()(]()[][]) -> in
         ][)([[]([))) -> out
         ]][]]])([)[] -> out
-        ([[)([)(]]]) -> in"""
+        %s -> in""" % x
         # Human-readable printout: bracket form and membership
         # seqs = strings.tolist()
         # labs = labels.tolist()
