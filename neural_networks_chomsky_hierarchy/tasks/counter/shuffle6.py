@@ -113,24 +113,46 @@ class Shuffle6(task.GeneralizationTask):
             if all(_is_valid_dyck_pair(arr, o, c) for (o, c) in bracket_types):
                 pos_list.append(arr)
 
-        # --- 4) Generate hard negatives by swapping one matched pair ---
-        # Hard negatives: corrupt exactly one bracket type in each positive
-        # We directly generates the hard negative list from the positive examples.
+        # --- 4) Generate hard negatives by swapping or relabeling ---
         hard_neg_list: list[jnp.ndarray] = []
-        for arr in pos_list:
+        half_negs = len(pos_list) // 2
+
+        # 4a) First half: swap one matched pair
+        for arr in pos_list[:half_negs]:
             bad = random.randrange(6)
             o_sym, c_sym = bracket_types[bad]
             seq = list(arr.tolist())
             # Find all indices of open and close symbols of this type
-            opens = [i for i,x in enumerate(seq) if x == o_sym]
-            closes = [i for i,x in enumerate(seq) if x == c_sym]
+            opens = [i for i, x in enumerate(seq) if x == o_sym]
+            closes = [i for i, x in enumerate(seq) if x == c_sym]
             # Try to find a valid pair where open precedes close
-            pairs = [(i,j) for i in opens for j in closes if i < j]
+            pairs = [(i, j) for i in opens for j in closes if i < j]
             if not pairs:
                 continue
-            # Pick one valid (open, close) pair to corrupt by swapping them.
+            # Swap one matched pair
             i, j = random.choice(pairs)
             seq[i], seq[j] = seq[j], seq[i]
+            hard_neg_list.append(jnp.array(seq, dtype=jnp.int32))
+
+        # 4b) Second half: relabel one bracket to a different type
+        """ Some Examples:
+        {<[>}(>⟨⌈⟩⌉] -> out
+        []<>{⟨(⟩}}⌈⌉ -> out
+        """
+        for arr in pos_list[half_negs:]:
+            seq = list(arr.tolist())
+            # Pick a random position to corrupt
+            idx = random.randrange(len(seq))
+            orig = seq[idx]
+            # Determine open (even) vs. close (odd)
+            is_open = (orig % 2 == 0)
+            # Candidates: same parity but different symbol
+            candidates = [
+                sym for sym in range(12)
+                if (sym % 2 == (0 if is_open else 1)) and sym != orig
+            ]
+            # Relabel it
+            seq[idx] = random.choice(candidates)
             hard_neg_list.append(jnp.array(seq, dtype=jnp.int32))
 
         neg_list = hard_neg_list
