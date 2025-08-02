@@ -75,5 +75,9 @@ Example of Training and Running:
 ```bash
 python example_stack_t.py --batch_size 32 --training_steps 5000 --task shuffle2 --architecture stack_rnn --stack=True --pos=ALIBI --seed=0
 ```
-Replace `$task` with one of task insider the folder 'tasks',
-and `$pos` with one of `["NONE", "SIN_COS", "ALIBI", "RELATIVE", "ROTARY"]`.
+- `$task` is the task for model to learn. Replace `$task` with one of task insider the folder 'tasks'.
+- `$pos` is the positional encoding for the Transformer archetecture. Replace with one of `["NONE", "SIN_COS", "ALIBI", "RELATIVE", "ROTARY"]`.
+- `$training_steps` is the total number of steps the model will spend in learning the task. The more training steps, the more data the model will learn. Adjust this parameter as appropriate.
+- `$architecture`  includes Transformer and Stack Recurrent neural networks.
+- `$stack` is a parameter specific to the Transformer archetecture, set it to True if you want to enable the stack attention mechnisam.
+- Meanwhile, though the learning rate is not defined as a parameter, 4 learning will be used to train the model separately and only the highest accurcy will be reported, see the code 'example_stack_t.py' for more details.
