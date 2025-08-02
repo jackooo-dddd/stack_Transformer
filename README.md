@@ -71,6 +71,9 @@ Before running any code, make sure to activate the conda environment:
 ```bash
 conda activate Stack_Attention
 ```
-Example of Training and Running: python example_stack_t.py --batch_size 32 --training_steps 5000 --task shuffle2 --architecture stack_rnn --stack=True --pos=ALIBI --seed=0
+Example of Training and Running: 
+```bash
+python example_stack_t.py --batch_size 32 --training_steps 5000 --task shuffle2 --architecture stack_rnn --stack=True --pos=ALIBI --seed=0
+```
 Replace `$task` with one of task insider the folder 'tasks',
 and `$pos` with one of `["NONE", "SIN_COS", "ALIBI", "RELATIVE", "ROTARY"]`.
