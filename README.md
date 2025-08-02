@@ -30,16 +30,42 @@ Some parts of the code (Task setting up, regular, CS and DCF tasks) are adapted 
 ├── train_job_para.sh         - Training script submit to the remote server of Compute Canada  
 └── requirements.txt          - Dependencies
 ```
-## Dependencies
-- python 3.11.2
-- pytorch 2.0.1+cu118
-- jaxlib 0.4.16+cuda11.cudnn86
-## Setup
-Install required packages:
+`tasks` contains all tasks, organized in their Chomsky hierarchy levels (regular, dcf, cs, counters).
+They all inherit the abstract class `GeneralizationTask`, defined in `tasks/task.py`.
+
+`models` contains all the models we use, written in [jax](https://github.com/google/jax) and [haiku](https://github.com/deepmind/dm-haiku), two open source libraries.
+
+`training` contains the code for training models and evaluating them on a wide range of lengths.
+We also included an example to train and evaluate an RNN on the Even Pairs task.
+## Installation
+
+Clone the source code into a local directory:
+```bash
+git clone [https://github.com/google-deepmind/neural_networks_chomsky_hierarchy.git](https://github.com/jackooo-dddd/stack_Transformer.git)
+cd neural_networks_chomsky_hierarchy
 ```
+
+`pip install -r requirements.txt` will install all required dependencies.
+This is best done inside a [conda environment](https://www.anaconda.com/).
+To that end, install [Anaconda](https://www.anaconda.com/download#downloads).
+Then, create and activate the conda environment:
+```bash
+conda create --name nnch
+conda activate nnch
+```
+
+Install `pip` and use it to install all the dependencies:
+```bash
+conda install pip
 pip install -r requirements.txt
 ```
 
+If you have a GPU available (highly recommended for fast training), then you can install JAX with CUDA support.
+```bash
+pip install --upgrade "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+```
+Note that the jax version must correspond to the existing CUDA installation you wish to use.
+Please see the [JAX documentation](https://github.com/google/jax#installation) for more details.
 ## Deterministic Context-Free Tasks
 ```
 cd neural_networks_chomsky_hierarchy/
