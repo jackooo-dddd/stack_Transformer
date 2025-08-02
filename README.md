@@ -1,11 +1,10 @@
 # stack-transformer
-This repository is in accompany with the paper: [results](Formal Language Learning with Transformers.pdf)
+[This repository is in accompany with the paper:](Formal_Language_Learning_Transformers.pdf)
 
 ## Dependencies
 - python 3.11.2
 - pytorch 2.0.1+cu118
 - jaxlib 0.4.16+cuda11.cudnn86
-View the [results](example_stack_t.py)
 ## Setup
 Install required packages:
 ```
