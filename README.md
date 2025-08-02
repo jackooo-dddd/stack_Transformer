@@ -64,17 +64,21 @@ pip install --upgrade "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-re
 ```
 Note that the jax version must correspond to the existing CUDA installation you wish to use.
 Please see the [JAX documentation](https://github.com/google/jax#installation) for more details.
-## Deterministic Context-Free Tasks
+
+## Usage
+
+Before running any code, make sure to activate the conda environment:
+```bash
+conda activate Stack_Attention
 ```
-cd neural_networks_chomsky_hierarchy/
-python training/example.py \
-    --batch_size 32 \
-    --training_steps 100000 \
-    --task $stack \
-    --architecture transformer_encoder \
-    --stack \
-    --pos $pos \
-    --seed 0
+Example of Training and Running: 
+```bash
+python example_stack_t.py --batch_size 32 --training_steps 5000 --task shuffle2 --architecture stack_rnn --stack=True --pos=ALIBI --seed=0
 ```
-Replace `$task` with one of `["reverse_string", "stack_manipulation", "modular_arithmetic_brackets", "solve_equation"]`,
-and `$pos` with one of `["NONE", "SIN_COS", "ALIBI", "RELATIVE", "ROTARY"]`.
+- `$task` specifies the task the model will learn. Replace `$task` with one of the tasks inside the `tasks` folder.  
+- `$pos` determines the type of positional encoding used in the Transformer architecture. Choose one from `["NONE", "SIN_COS", "ALIBI", "RELATIVE", "ROTARY"]`.  
+- `$training_steps` sets the total number of steps the model will train on the task. A higher value allows the model to learn from more data. Adjust this parameter as needed.  
+- `$architecture` indicates the model type—either Transformer or Stack Recurrent Neural Network.  
+- `$stack` is a parameter specific to the Transformer architecture. Set it to `True` to enable the stack attention mechanism.  
+- Although the learning rate is not explicitly defined as a parameter, four different values will be used to train the model separately. Only the result with the highest accuracy will be reported. See the file `example_stack_t.py` for more details.
+
