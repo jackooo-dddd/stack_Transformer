@@ -75,9 +75,10 @@ Example of Training and Running:
 ```bash
 python example_stack_t.py --batch_size 32 --training_steps 5000 --task shuffle2 --architecture stack_rnn --stack=True --pos=ALIBI --seed=0
 ```
-- `$task` is the task for model to learn. Replace `$task` with one of task insider the folder 'tasks'.
-- `$pos` is the positional encoding for the Transformer archetecture. Replace with one of `["NONE", "SIN_COS", "ALIBI", "RELATIVE", "ROTARY"]`.
-- `$training_steps` is the total number of steps the model will spend in learning the task. The more training steps, the more data the model will learn. Adjust this parameter as appropriate.
-- `$architecture`  includes Transformer and Stack Recurrent neural networks.
-- `$stack` is a parameter specific to the Transformer archetecture, set it to True if you want to enable the stack attention mechnisam.
-- Meanwhile, though the learning rate is not defined as a parameter, 4 learning will be used to train the model separately and only the highest accurcy will be reported, see the code 'example_stack_t.py' for more details.
+- `$task` specifies the task the model will learn. Replace `$task` with one of the tasks inside the `tasks` folder.  
+- `$pos` determines the type of positional encoding used in the Transformer architecture. Choose one from `["NONE", "SIN_COS", "ALIBI", "RELATIVE", "ROTARY"]`.  
+- `$training_steps` sets the total number of steps the model will train on the task. A higher value allows the model to learn from more data. Adjust this parameter as needed.  
+- `$architecture` indicates the model type—either Transformer or Stack Recurrent Neural Network.  
+- `$stack` is a parameter specific to the Transformer architecture. Set it to `True` to enable the stack attention mechanism.  
+- Although the learning rate is not explicitly defined as a parameter, four different values will be used to train the model separately. Only the result with the highest accuracy will be reported. See the file `example_stack_t.py` for more details.
+
