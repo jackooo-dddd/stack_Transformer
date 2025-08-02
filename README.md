@@ -1,6 +1,7 @@
 # stack-transformer
 This repository is in accompany with the paper:[Formal_Language_Learning_Transformers.pdf](Formal_Language_Learning_Transformers.pdf)
-
+# Acknowledgement
+Some parts of the code (Task setting up, regular, CS and DCF tasks) are adapted from [neural_networks_chomsky_hierarchy](https://github.com/google-deepmind/neural_networks_chomsky_hierarchy/tree/main).
 ## Dependencies
 - python 3.11.2
 - pytorch 2.0.1+cu118
@@ -12,7 +13,6 @@ pip install -r requirements.txt
 ```
 
 ## Deterministic Context-Free Tasks
-This part of the code is adapted from [neural_networks_chomsky_hierarchy](https://github.com/google-deepmind/neural_networks_chomsky_hierarchy/tree/main).
 ```
 cd neural_networks_chomsky_hierarchy/
 python training/example.py \
