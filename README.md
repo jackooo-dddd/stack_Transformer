@@ -64,17 +64,13 @@ pip install --upgrade "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-re
 ```
 Note that the jax version must correspond to the existing CUDA installation you wish to use.
 Please see the [JAX documentation](https://github.com/google/jax#installation) for more details.
-## Deterministic Context-Free Tasks
+
+## Usage
+
+Before running any code, make sure to activate the conda environment:
+```bash
+conda activate Stack_Attention
 ```
-cd neural_networks_chomsky_hierarchy/
-python training/example.py \
-    --batch_size 32 \
-    --training_steps 100000 \
-    --task $stack \
-    --architecture transformer_encoder \
-    --stack \
-    --pos $pos \
-    --seed 0
-```
-Replace `$task` with one of `["reverse_string", "stack_manipulation", "modular_arithmetic_brackets", "solve_equation"]`,
+Example of Training and Running: python example_stack_t.py --batch_size 32 --training_steps 5000 --task shuffle2 --architecture stack_rnn --stack=True --pos=ALIBI --seed=0
+Replace `$task` with one of task insider the folder 'tasks',
 and `$pos` with one of `["NONE", "SIN_COS", "ALIBI", "RELATIVE", "ROTARY"]`.
