@@ -1,5 +1,5 @@
 # stack-transformer
-[This repository is in accompany with the paper:](Formal_Language_Learning_Transformers.pdf)
+This repository is in accompany with the paper:[Formal_Language_Learning_Transformers.pdf](Formal_Language_Learning_Transformers.pdf)
 
 ## Dependencies
 - python 3.11.2
