@@ -1,5 +1,5 @@
 # stack-transformer
-This repository is in accompany with the paper: [A Transformer with Stack Attention](https://arxiv.org/abs/2405.04515).
+This repository is in accompany with the paper: [results](Formal Language Learning with Transformers.pdf)
 
 ## Dependencies
 - python 3.11.2
