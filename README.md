@@ -25,6 +25,7 @@ Some parts of the code (Task setting up, regular, CS and DCF tasks) are adapted 
 |   ├── range_evaluation.py   - Evaluation loop (over unseen sequence lengths)
 |   ├── training.py           - Training loop
 |   └── utils.py              - Utility functions
+├── results_learning_rate     - A folder contains my experiment results under all learning rates.
 ├── README.md
 ├── example_stack_t.py        - Example training script
 ├── train_job_para.sh         - Training script submit to the remote server of Compute Canada  
@@ -80,5 +81,5 @@ python example_stack_t.py --batch_size 32 --training_steps 5000 --task shuffle2 
 - `$training_steps` sets the total number of steps the model will train on the task. A higher value allows the model to learn from more data. Adjust this parameter as needed.  
 - `$architecture` indicates the model type—either Transformer or Stack Recurrent Neural Network.  
 - `$stack` is a parameter specific to the Transformer architecture. Set it to `True` to enable the stack attention mechanism.  
-- Although the learning rate is not explicitly defined as a parameter, four different values will be used to train the model separately. Only the result with the highest accuracy will be reported. See the file `example_stack_t.py` for more details.
+- Although the learning rate is not explicitly defined as a parameter, four different values (1e-3, 5e-4, 1e-4, 5e-5) will be used to train the model separately. Only the result with the highest accuracy will be reported. See the file `example_stack_t.py` for more details.
 
