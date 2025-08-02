@@ -1,5 +1,5 @@
 # stack-transformer
-This repository is in accompany with the paper:[Formal_Language_Learning_Transformers.pdf](Formal_Language_Learning_Transformers.pdf)
+This repository is in accompany with the paper: [Formal_Language_Learning_Transformers.pdf](Formal_Language_Learning_Transformers.pdf)
 # Acknowledgement
 Some parts of the code (Task setting up, regular, CS and DCF tasks) are adapted from [neural_networks_chomsky_hierarchy](https://github.com/google-deepmind/neural_networks_chomsky_hierarchy/tree/main).
 ## Dependencies
