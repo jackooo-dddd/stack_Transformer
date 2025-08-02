@@ -16,6 +16,7 @@ Some parts of the code (Task setting up, regular, CS and DCF tasks) are adapted 
 |   ├── cs                    - Context-sensitive tasks
 |   ├── dcf                   - Determinisitc context-free tasks
 |   ├── regular               - Regular tasks
+|   ├── counter               - Counter tasks (Dyck, Shuffle)
 |   └── task.py               - Abstract GeneralizationTask
 ├── experiments
 |   ├── constants.py          - Training/Evaluation constants
