@@ -27,15 +27,3 @@ python training/example.py \
 ```
 Replace `$task` with one of `["reverse_string", "stack_manipulation", "modular_arithmetic_brackets", "solve_equation"]`,
 and `$pos` with one of `["NONE", "SIN_COS", "ALIBI", "RELATIVE", "ROTARY"]`.
-
-## Masked and Causal Language Modeling
-```
-cd language_modeling/
-python run.py \
-    --output_dir outputs/ \
-    --epochs 1 \
-    --seeds 0 \
-    --dataset ptb \
-    --use_stack \
-    --task mlm
-```
