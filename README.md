@@ -41,7 +41,7 @@ They all inherit the abstract class `GeneralizationTask`, defined in `tasks/task
 
 Clone the source code into a local directory:
 ```bash
-git clone [https://github.com/google-deepmind/neural_networks_chomsky_hierarchy.git](https://github.com/jackooo-dddd/stack_Transformer.git)
+git clone https://github.com/jackooo-dddd/stack_Transformer.git
 ```
 
 `pip install -r requirements.txt` will install all required dependencies.
