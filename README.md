@@ -36,13 +36,11 @@ They all inherit the abstract class `GeneralizationTask`, defined in `tasks/task
 `models` contains all the models we use, written in [jax](https://github.com/google/jax) and [haiku](https://github.com/deepmind/dm-haiku), two open source libraries.
 
 `training` contains the code for training models and evaluating them on a wide range of lengths.
-We also included an example to train and evaluate an RNN on the Even Pairs task.
 ## Installation
 
 Clone the source code into a local directory:
 ```bash
 git clone [https://github.com/google-deepmind/neural_networks_chomsky_hierarchy.git](https://github.com/jackooo-dddd/stack_Transformer.git)
-cd neural_networks_chomsky_hierarchy
 ```
 
 `pip install -r requirements.txt` will install all required dependencies.
@@ -50,8 +48,8 @@ This is best done inside a [conda environment](https://www.anaconda.com/).
 To that end, install [Anaconda](https://www.anaconda.com/download#downloads).
 Then, create and activate the conda environment:
 ```bash
-conda create --name nnch
-conda activate nnch
+conda create --name Stack_Attention
+conda activate Stack_Attention
 ```
 
 Install `pip` and use it to install all the dependencies:
@@ -60,7 +58,7 @@ conda install pip
 pip install -r requirements.txt
 ```
 
-If you have a GPU available (highly recommended for fast training), then you can install JAX with CUDA support.
+If you have a GPU available (highly recommended for fast training on stack attention), then you can install JAX with CUDA support.
 ```bash
 pip install --upgrade "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 ```
