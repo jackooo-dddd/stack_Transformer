@@ -5,7 +5,7 @@ This repository is in accompany with the paper: [A Transformer with Stack Attent
 - python 3.11.2
 - pytorch 2.0.1+cu118
 - jaxlib 0.4.16+cuda11.cudnn86
-- View the [results](example_stack_t.py)
+View the [results](example_stack_t.py)
 ## Setup
 Install required packages:
 ```
